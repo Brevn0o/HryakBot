@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
 from .imports import *
-from asgiref.sync import async_to_sync
 
 load_dotenv()
 
@@ -86,7 +85,6 @@ async def _disabled_add_log(*args, **kwargs):
     pass
 hryak.Func.add_log = _disabled_add_log
 
-# async_to_sync(hryak.db_api.connection.pool.create_pool)(**mysql_info)
 hryak.db_api.connection.pool.set_config(**mysql_info)
 
 setters.set_test_mode(TEST)
