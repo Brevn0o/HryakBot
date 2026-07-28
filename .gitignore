@@ -1,9 +1,6 @@
 .
-logs.json
-test_logs.json
 /bin/temp/
 __pycache__/
 /pig_code/core/.env
-/logs/
 /temp/
 *.pyc

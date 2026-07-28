@@ -12,14 +12,6 @@ class Events(commands.Cog):
         self.client = client
         aiocache.Cache(Cache.MEMORY)
         if not config.TEST:
-            init_data = {'start': hryak.Func.generate_current_timestamp()}
-            if config.HOSTING_TYPE == 'pc':
-                init_data['pid'] = os.getpid()
-                handle = win32api.OpenProcess(win32con.PROCESS_ALL_ACCESS, True, os.getpid())
-                win32process.SetPriorityClass(handle, win32process.HIGH_PRIORITY_CLASS)
-                with open(config.INIT_DATA_PATH, 'w') as f:
-                    f.write(json.dumps(init_data))
-        if not config.TEST:
             Func.clear_folder(config.TEMP_FOLDER_PATH)
 
     @commands.Cog.listener()
@@ -217,7 +209,6 @@ class Events(commands.Cog):
                                                                 trade_id=trade_id,
                                                                 pre_command_check=False)
                 if custom_id_params[0] in ['like', 'dislike']:
-                    print(1234)
                     if custom_id_params[0] == 'like':
                         await User.append_rate(custom_id_params[1], interaction.user.id, 1)
                     elif custom_id_params[0] == 'dislike':

@@ -37,7 +37,6 @@ class AdminCommands(commands.Cog):
     @discord.app_commands.guilds(*[*config.ADMIN_GUILDS, *config.TEST_GUILDS])
     @commands.is_owner()
     async def test(self, inter, i: int):
-        print(i)
         await User.register(i)
         # await DisUtils.pre_command_check(inter, owner_only=True)
         await send_callback(inter, f'*{i} is registered*')

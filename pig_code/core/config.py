@@ -19,8 +19,6 @@ def get_env(key, value_type=None):
 TOKEN = get_env('TOKEN')
 TEST_TOKEN = get_env('TEST_TOKEN')
 TEST = get_env('TEST', bool)
-print(TEST)
-HOSTING_TYPE = 'pc' if not TEST else None
 ADMIN_GUILDS = get_env('ADMIN_GUILDS', list)
 TEST_GUILDS = get_env('TEST_GUILDS', list)
 PUBLIC_TEST_GUILDS = get_env('PUBLIC_TEST_GUILDS', list)
@@ -60,8 +58,6 @@ HALYAVERS = get_env('HALYAVERS', list)  # users who are able to give rewards in 
 # paths
 TEMP_FOLDER_PATH = get_env('TEMP_FOLDER_PATH')
 IMAGES_FOLDER_PATH = f'bin/images'
-INIT_DATA_PATH = get_env('INIT_DATA_PATH')
-LOGS_PATH = get_env('LOGS_PATH') if not TEST else get_env('TEST_LOGS_PATH')
 
 # webhooks
 DEBUGGER_WEBHOOK = get_env('DEBUGGER_WEBHOOK')
@@ -85,10 +81,14 @@ else:
 
 from hryak import setters
 
+# logging disabled for now: no-op instead of writing to a local logs file
+async def _disabled_add_log(*args, **kwargs):
+    pass
+hryak.Func.add_log = _disabled_add_log
+
 # async_to_sync(hryak.db_api.connection.pool.create_pool)(**mysql_info)
 hryak.db_api.connection.pool.set_config(**mysql_info)
 
-setters.set_logs_path(LOGS_PATH)
 setters.set_test_mode(TEST)
 setters.set_bot_guilds(BOT_GUILDS)
 setters.set_temp_folder_path(TEMP_FOLDER_PATH)

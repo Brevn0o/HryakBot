@@ -36,10 +36,3 @@ from cachetools import cached, TTLCache
 import hryak
 from hryak.db_api import *
 from hryak.functions import translate
-
-try:
-    import win32api
-    import win32con
-    import win32process
-except ImportError:
-    pass
