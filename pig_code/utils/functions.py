@@ -82,6 +82,9 @@ class Func:
 
     @staticmethod
     def clear_folder(path):
+        if not os.path.exists(path):
+            os.makedirs(path)
+            return
         for filename in os.listdir(path):
             file_path = os.path.join(path, filename)
             try:
