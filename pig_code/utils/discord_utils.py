@@ -555,7 +555,7 @@ class DisUtils:
                 lang = 'en'
             await User.set_language(inter.user.id, lang)
             await Stats.set_language_changed(inter.user.id, True)
-            await Pig.rename(inter.user.id, Func.generate_random_pig_name(await User.get_language(inter.user.id)))
+            await Pig.rename(inter.user.id, hryak.Func.generate_random_pig_name(await User.get_language(inter.user.id)))
         if await User.is_blocked(inter.user.id):
             raise UserInBlackList(inter.user)
         if owner_only and not await inter.client.is_owner(inter.user):

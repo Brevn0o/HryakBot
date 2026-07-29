@@ -112,17 +112,6 @@ image_links = {'inventory': 'https://thumbsnap.com/i/4EBKi23j.png',
                'buffs': 'https://thumbsnap.com/i/ajKoAv44.png',
                'quests': 'https://i.ibb.co/Htmxmxj/Quest-Main-Available-Icon-001.png'}
 
-pig_names = [
-    {'en': ['Sleepy', 'Angry', 'Kind', 'Crazy', 'Drunk', 'High', 'Big', 'Stinky', 'Fat', 'Thin', 'Funny', 'Smart',
-            'Dumb', 'Sexy', 'Chubby', 'Small', 'Large'],
-     'ru': ['Грязный', 'Крутой', 'Сухой', 'Мокрый', 'Обкуренный', 'Мертвый', 'Вонючий', 'Сладкий', 'Непробиваемый',
-            'Толстый', 'Тонкий', 'Смешной', 'Умный', 'Глупый', 'Сексуальный', 'Пухлый', 'Маленький', 'Большой']},
-    {'en': ['Pig', 'Meat', 'Maxim', 'John', 'Jack', 'Chris', 'Anthony'],
-     'ru': ['Хряк', 'Свин', 'Шашлык', 'Максим', 'Антон', 'Александр', 'Иван', 'Матвей', 'Даниил', 'Денис', 'Кирилл',
-            'Дмитрий', 'Артем', 'Алексей', 'Егор', 'Станислав', 'Роман', 'Виктор', 'Илья', 'Никита', 'Владимир',
-            'Михаил']},
-]
-
 shops_emojis = {
     'daily_shop': '🎨',
     'case_shop': '📦',
@@ -133,28 +122,7 @@ shops_emojis = {
     'donation_shop': '🍩',
 }
 
-ignore_users_in_top = [715575898388037676]
-
 payment_methods_for_languages = {
     'ru': ['donatello'],
     'en': []
-}
-currency_symbols = {
-    'RUB': '₽',
-    'USD': '$',
-    'UAH': '₴ (UAH)'
-}
-amount_of_hollars_per_unit_of_real_currency = {
-    'RUB': 1,
-    'USD': 50,
-    'UAH': 2
-}
-currency_to_usd = {
-    'RUB': 90,
-    'USD': 1,
-    'UAH': 40
-}
-language_currencies = {
-    'ru': 'RUB',
-    'en': 'USD'
 }

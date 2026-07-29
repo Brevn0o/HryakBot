@@ -58,10 +58,6 @@ class Func:
         return {k: v for k, v in sorted(dictionary.items(), key=lambda x: x[1], reverse=reverse)}
 
     @staticmethod
-    def generate_random_pig_name(language):
-        return f'{translate(config.pig_names[0], language)} {translate(config.pig_names[1], language)}'
-
-    @staticmethod
     def get_command_name_and_options(ctx):
         name = ctx.data.get('name')
         options = []

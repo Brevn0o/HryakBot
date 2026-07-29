@@ -73,7 +73,7 @@ class Tasks(commands.Cog):
                     await User.add_item(user_id, item_id, amount)
                 await Stats.add_successful_orders(user_id, 1)
                 await Stats.add_dollars_donated(user_id, round(
-                    await Order.get_amount(order_id) / config.currency_to_usd[await Order.get_currency(order_id)], 2))
+                    await Order.get_amount(order_id) / hryak.config.currency_to_usd[await Order.get_currency(order_id)], 2))
                 await Order.delete(order_id)
             await asyncio.sleep(.3)
 

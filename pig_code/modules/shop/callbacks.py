@@ -140,7 +140,7 @@ async def donation_page_selected(inter, category):
                                 embed=generate_embed(translate(Locales.PremiumShop.buy_hollars_page_title, lang),
                                                      translate(Locales.PremiumShop.buy_hollars_page_desc, lang,
                                                                {'amount':
-                                                                    config.amount_of_hollars_per_unit_of_real_currency[
+                                                                    hryak.config.amount_of_hollars_per_unit_of_real_currency[
                                                                         hryak.config.language_currencies[lang]]}),
                                                      prefix=Func.generate_prefix('💵'),
                                                      footer_url=Func.generate_footer_url(user=inter.user),
@@ -168,7 +168,7 @@ async def donation_page_selected(inter, category):
         modal_interaction, amount = await modals.get_amount_of_hollars_to_donate(interaction, delete_response=True)
         if amount is False:
             return
-        price = round(amount / config.amount_of_hollars_per_unit_of_real_currency[currency], 2)
+        price = round(amount / hryak.config.amount_of_hollars_per_unit_of_real_currency[currency], 2)
         await choose_payment_method(inter, category, amount, price, currency)
     if category == 'coins':
         options = []
@@ -177,7 +177,7 @@ async def donation_page_selected(inter, category):
                 label=translate(Locales.PremiumShop.select_coins_option_label, lang, {'amount': k}),
                 description=translate(Locales.PremiumShop.select_coins_option_desc, lang, {'price': v,
                                                                                            'currency':
-                                                                                               config.currency_symbols[
+                                                                                               hryak.config.currency_symbols[
                                                                                                    currency]}),
                 emoji='🪙',
                 value=f'{k}'))
@@ -241,14 +241,14 @@ async def choose_payment_method(inter, category, amount, price, currency):
     order_id = await Order.generate_order_id(interaction.data['values'][0])
     if interaction.data['values'][0] == 'donatello':
         await Order.create(inter.user.id, order_id, items, price, currency, platform='donatello')
-        price /= config.currency_to_usd[currency]
+        price /= hryak.config.currency_to_usd[currency]
         currency = 'UAH'
-        price *= config.currency_to_usd[currency]
+        price *= hryak.config.currency_to_usd[currency]
         price = round(price, 2)
         await send_callback(interaction, embed=generate_embed(
             translate(Locales.PremiumShop.donatello_pay_title, lang),
             description=translate(Locales.PremiumShop.donatello_pay_desc, lang,
-                                  {'amount': price, 'currency': config.currency_symbols[currency],
+                                  {'amount': price, 'currency': hryak.config.currency_symbols[currency],
                                    'order_id': order_id}),
             prefix=Func.generate_prefix('🍩'),
             footer_url=Func.generate_footer_url(user=inter.user),
