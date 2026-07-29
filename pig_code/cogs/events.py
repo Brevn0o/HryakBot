@@ -17,8 +17,6 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print(f'Bot is ready: {self.client.user}')
-        await hryak.db_api.connection.pool.create_pool()
-        print('> Pool is created')
         if not os.path.exists(config.TEMP_FOLDER_PATH):
             os.makedirs(config.TEMP_FOLDER_PATH)
         print('> Temp folder is created')

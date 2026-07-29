@@ -40,6 +40,8 @@ class PigBot:
         self.bot.setup_hook = self.setup_hook
 
     async def setup_hook(self):
+        await hryak.db_api.connection.pool.create_pool()
+        print('> Pool is created')
         cogs_path = 'pig_code/cogs'
         for file in os.listdir(cogs_path):
             if file.endswith('.py'):

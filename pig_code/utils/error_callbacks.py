@@ -28,7 +28,11 @@ async def default_error_callback(inter, title, description, prefix_emoji: str = 
 
 
 async def error(error, inter):
-    lang = await User.get_language(inter.user.id)
+    try:
+        lang = await User.get_language(inter.user.id)
+    except Exception:
+        # the DB may be exactly what broke — never let the error handler die on it
+        lang = hryak.config.user_settings['language']
     text_error = str(type(error)).split('.')[-1].split('\'')[0]
     if type(error) == discord.app_commands.errors.NoPrivateMessage:
         await default_error_callback(inter, translate(Locales.ErrorCallbacks.not_allowed_to_use_command_title, lang),
