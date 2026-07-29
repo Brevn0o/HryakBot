@@ -56,7 +56,6 @@ HALYAVERS = get_env('HALYAVERS', list)  # users who are able to give rewards in 
 
 # paths
 TEMP_FOLDER_PATH = get_env('TEMP_FOLDER_PATH')
-IMAGES_FOLDER_PATH = f'bin/images'
 
 # webhooks
 DEBUGGER_WEBHOOK = get_env('DEBUGGER_WEBHOOK')
