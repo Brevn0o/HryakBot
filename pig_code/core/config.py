@@ -90,6 +90,7 @@ hryak.db_api.connection.pool.set_config(**mysql_info)
 setters.set_test_mode(TEST)
 setters.set_bot_guilds(BOT_GUILDS)
 setters.set_temp_folder_path(TEMP_FOLDER_PATH)
+
 if TEST:
     setters.set_pig_feed_cooldown(5)
     setters.set_pig_butcher_cooldown(15)
