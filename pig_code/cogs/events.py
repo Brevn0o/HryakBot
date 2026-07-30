@@ -222,6 +222,7 @@ class Events(commands.Cog):
                 if custom_id_params[0] == 'item_select':
                     await interaction.response.defer()
                     if custom_id_params[1] == 'inventory':
+                        print(11111111)
                         await modules.inventory.callbacks.inventory_item_selected(interaction, interaction_values[0],
                                                                                   category=custom_id_params[2],
                                                                                   page=int(custom_id_params[3]))

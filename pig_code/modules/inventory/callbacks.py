@@ -75,6 +75,7 @@ async def wardrobe_item_selected(inter, item_id, message: discord.Message = None
 async def inventory_item_selected(inter, item_id, message: discord.Message = None, category: str = None, page: int = 1,
                                   edit_followup: bool = False):
     lang = await User.get_language(inter.user.id)
+    print(2222222222)
     await send_callback(inter if message is None else message, edit_followup=edit_followup,
                         embed=await Embeds.item_selected_embed(inter, lang, item_id=item_id,
                                                                        _type='inventory'),
