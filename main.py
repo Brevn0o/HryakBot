@@ -7,7 +7,8 @@ logging.basicConfig(level=logging.INFO)
 def loop_exception_handler(loop, context):
     exc = context.get("exception")
     if isinstance(exc, ssl.SSLError) and "bad record mac" in str(exc).lower():
-        logging.warning("[SSL] bad record mac caught: %s", exc)
+        # log the traceback and the context so we can tell which connection it came from
+        logging.warning("[SSL] bad record mac caught: %s", context, exc_info=exc)
         # you can schedule a retry or pool reset here, e.g.:
         # asyncio.create_task(reset_pool())
         return  # swallow it
