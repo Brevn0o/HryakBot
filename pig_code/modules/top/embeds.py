@@ -14,7 +14,7 @@ async def generate_top_embed(inter, lang: str, title: str, description: str, use
     leader_emojis = ['🥇', '🥈', '🥉']
 
     async def generate_line(place, user):
-        return f'> {leader_emojis[place] if place < 3 else place + 1}・{await User.get_discord_name(inter.client, user[0])} - **{user[1]}** {user[2]}\n'
+        return f'> {leader_emojis[place] if place < 3 else place + 1}・{await User.get_discord_user_name(inter.client, user[0])} - **{user[1]}** {user[2]}\n'
 
     fields = []
     best_users_field = {'name': translate(Locales.Top.best_of_the_bests, lang),
