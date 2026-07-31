@@ -12,19 +12,15 @@ async def wardrobe(inter, message=None, select_item_component_id: str = 'item_se
     if pre_command_check:
         await DisUtils.pre_command_check(inter)
     lang = await User.get_language(inter.user.id)
-    _items = await Tech.get_all_items((('inventory_type', 'wardrobe'),), user_id=inter.user.id)
-    items_by_cats = {}
     embed_thumbnail_url = await DisUtils.generate_user_pig(inter.user.id)
     empty_desc = translate(Locales.Wardrobe.wardrobe_empty_desc, lang)
-    item_types = set()
-    for item in _items:
-        item_types.add(await Item.get_skin_type(item))
-    item_types = sorted(item_types)
-    for i, item_type in enumerate(['all'] + item_types):
-        items_by_cats[
-            translate(hryak.locale.Locale.SkinTypes[item_type], lang) if item_type != 'all' else translate(
-                Locales.Global.everything, lang)] = \
-            await Tech.get_all_items((('skin_config', 'type', item_type),)) if item_type != 'all' else _items
+    _cats = await Tech.get_categorized_items(inter.user.id, 'wardrobe')
+    # labels are what the user sees; the raw keys are what travels in custom_ids
+    category_labels = {key: (translate(Locales.Global.everything, lang) if key == 'all'
+                             else translate(hryak.locale.Locale.SkinTypes[key], lang)) for key in _cats}
+    items_by_cats = {category_labels[key]: items for key, items in _cats.items()}
+    category_keys = {label: key for key, label in category_labels.items()}
+    init_category = category_labels.get(init_category, init_category)
     await DisUtils.pagination(inter, lang, message=message,
                            embeds=await Embeds.generate_items_list_embeds(inter, items_by_cats, lang, empty_desc,
                                                                          list_type='wardrobe',
@@ -32,7 +28,9 @@ async def wardrobe(inter, message=None, select_item_component_id: str = 'item_se
                                                                          title=translate(
                                                                              Locales.Wardrobe.wardrobe_title,
                                                                              lang),
-                                                                         tradable_items_only=tradable_items_only),
+                                                                         tradable_items_only=tradable_items_only,
+                                                                         sort=False,
+                                                                         category_keys=category_keys),
                            embed_thumbnail_url=embed_thumbnail_url, ephemeral=ephemeral,
                            edit_original_response=edit_original_response, edit_followup=edit_followup,
                            init_category=init_category,
@@ -46,16 +44,21 @@ async def inventory(inter, message=None, select_item_component_id: str = 'item_s
     if pre_command_check:
         await DisUtils.pre_command_check(inter)
     lang = await User.get_language(inter.user.id)
-    _items = await Tech.get_all_items((('inventory_type', 'inventory'),), user_id=inter.user.id)
     empty_desc = translate(Locales.Inventory.inventory_empty_desc, lang)
-    items_by_cats = {translate(Locales.Inventory.inventory_title, lang): _items}
+    _cats = await Tech.get_categorized_items(inter.user.id, 'inventory')
+    category_labels = {key: translate(Locales.Inventory.inventory_title, lang) for key in _cats}
+    items_by_cats = {category_labels[key]: items for key, items in _cats.items()}
+    category_keys = {label: key for key, label in category_labels.items()}
+    init_category = category_labels.get(init_category, init_category)
     await DisUtils.pagination(inter, lang, message=message,
                            embeds=await Embeds.generate_items_list_embeds(inter, items_by_cats, lang, empty_desc,
                                                                          select_item_component_id=select_item_component_id,
                                                                          title=translate(
                                                                              Locales.Inventory.inventory_title,
                                                                              lang),
-                                                                         tradable_items_only=tradable_items_only),
+                                                                         tradable_items_only=tradable_items_only,
+                                                                         sort=False,
+                                                                         category_keys=category_keys),
                            embed_thumbnail_url=await hryak.Func.get_image_path_from_link(
                                config.image_links['inventory']), ephemeral=ephemeral,
                            edit_original_response=edit_original_response, edit_followup=edit_followup,
@@ -75,7 +78,6 @@ async def wardrobe_item_selected(inter, item_id, message: discord.Message = None
 async def inventory_item_selected(inter, item_id, message: discord.Message = None, category: str = None, page: int = 1,
                                   edit_followup: bool = False):
     lang = await User.get_language(inter.user.id)
-    print(2222222222)
     await send_callback(inter if message is None else message, edit_followup=edit_followup,
                         embed=await Embeds.item_selected_embed(inter, lang, item_id=item_id,
                                                                        _type='inventory'),
@@ -87,7 +89,7 @@ async def wardrobe_item_wear(inter, item_id, message: discord.Message = None, ca
     lang = await User.get_language(inter.user.id)
     response = await hryak.requests.post_requests.wear_skin(inter.user.id, item_id)
     choose_parts = False
-    if response.get('status') == 'pending;choose_parts':
+    if response.get('status') == hryak.Status.PENDING_CHOOSE_PARTS:
         choose_parts = True
         custom_id = f'in;select_part;{random.randrange(100000)}'
         await send_callback(inter if message is None else message,

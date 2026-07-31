@@ -53,19 +53,19 @@ async def promocode(inter, code):
     await DisUtils.pre_command_check(inter)
     lang = await User.get_language(inter.user.id)
     response = await hryak.requests.post_requests.use_promocode(inter.user.id, code)
-    if response.get('status') == '400;not_exist':
+    if response.get('status') == hryak.Status.NOT_EXIST:
         await send_callback(inter, embed=await embeds.promocode_not_exist(inter, lang))
         return
-    elif response.get('status') == '400;used_too_many_times':
+    elif response.get('status') == hryak.Status.USED_TOO_MANY_TIMES:
         await send_callback(inter, embed=await embeds.promocode_used_too_many_times(inter, lang))
         return
-    elif response.get('status') == '400;expired':
+    elif response.get('status') == hryak.Status.EXPIRED:
         await send_callback(inter, embed=await embeds.promocode_expired(inter, lang))
         return
-    elif response.get('status') == '400;already_used':
+    elif response.get('status') == hryak.Status.ALREADY_USED:
         await send_callback(inter, embed=await embeds.user_used_promocode(inter, lang))
         return
-    elif response.get('status') == 'success':
+    elif response.get('status') == hryak.Status.SUCCESS:
         await send_callback(inter, embed=await embeds.promo_code_used(inter, lang, await PromoCode.get_rewards(code)))
 
 
@@ -73,7 +73,7 @@ async def send_money(inter, user, amount, currency, message=None):
     await DisUtils.pre_command_check(inter)
     lang = await User.get_language(inter.user.id)
     response = await hryak.requests.post_requests.send_money(inter.user.id, user.id, amount, currency, confirmed=False)
-    if response['status'] == '400;no_money':
+    if response['status'] == hryak.Status.NO_MONEY:
         await error_callbacks.no_money(inter)
         return
     confirmation = await DisUtils.confirm_message(inter, lang,
@@ -86,7 +86,7 @@ async def send_money(inter, user, amount, currency, message=None):
         await send_callback(inter, embed=await embeds.cancel_sending_money(inter, lang))
         return
     response = await hryak.requests.post_requests.send_money(inter.user.id, user.id, amount, currency, confirmed=True)
-    if response['status'] == '400;no_money':
+    if response['status'] == hryak.Status.NO_MONEY:
         await error_callbacks.no_money(inter)
         return
     title = f'{translate(Locales.SendMoney.event_title, lang)}'

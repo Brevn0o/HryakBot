@@ -17,6 +17,9 @@ async def shop(inter, message=None, init_category: str = None, init_page: int = 
              'coins_shop':Shop.get_coins_shop,
              # 'donation_shop': None
              }
+    # labels are what the user sees; the raw keys are what travels in custom_ids
+    category_labels = {shop_: translate(Locales.Shop.titles[shop_], lang) for shop_ in shops}
+    init_category = category_labels.get(init_category, init_category)
     if init_category is None:
         description = f'{translate(Locales.Shop.main_page_desc, lang)}\n\n'
         for shop_ in shops:
@@ -31,21 +34,24 @@ async def shop(inter, message=None, init_category: str = None, init_page: int = 
                             components=[discord.ui.Select(custom_id='move_to;shop',
                                                           placeholder=translate(Locales.Global.choose_category, lang),
                                                           options=[discord.SelectOption(
-                                                              label=translate(Locales.Shop.titles[shop_], lang),
-                                                              value=translate(Locales.Shop.titles[shop_], lang),
+                                                              label=category_labels[shop_],
+                                                              value=shop_,
                                                               emoji=config.shops_emojis[shop_]) for shop_ in
                                                               shops])])
         return
     items_by_cats = {}
+    category_keys = {}
     for shop_ in shops:
         if await shops[shop_]() is None:
             continue
-        items_by_cats[f'{translate(Locales.Shop.titles[shop_], lang)}'] = await shops[shop_]()
+        items_by_cats[category_labels[shop_]] = await shops[shop_]()
+        category_keys[category_labels[shop_]] = shop_
     embeds = await Embeds.generate_items_list_embeds(inter, items_by_cats, lang, sort=False,
                                                     list_type='shop',
                                                     prefix_emoji='🛍️',
                                                     select_item_component_id='item_select;shop',
-                                                    cat_as_title=True)
+                                                    cat_as_title=True,
+                                                    category_keys=category_keys)
     # embeds[translate(Locales.Shop.titles['donation_shop'], lang)] = {
     #         'embeds': [{'embed': generate_embed(translate(Locales.Shop.donation_shop_title, lang),
     #                                             translate(Locales.Shop.donation_shop_desc, lang),

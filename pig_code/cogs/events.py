@@ -212,17 +212,16 @@ class Events(commands.Cog):
                     elif custom_id_params[0] == 'dislike':
                         await User.append_rate(custom_id_params[1], interaction.user.id, -1)
                     await modules.other.callbacks.profile(interaction,
-                                                          await User.get_user(interaction.client, custom_id_params[1]),
+                                                          await User.get_discord_user(interaction.client, custom_id_params[1]),
                                                           pre_command_check=False)
                 elif custom_id_params[0] == 'view_profile':
                     await modules.other.callbacks.profile(interaction,
-                                                          await User.get_user(self.client, interaction_values[0]),
+                                                          await User.get_discord_user(self.client, interaction_values[0]),
                                                           edit_original_response=False, ephemeral=True,
                                                           pre_command_check=False)
                 if custom_id_params[0] == 'item_select':
                     await interaction.response.defer()
                     if custom_id_params[1] == 'inventory':
-                        print(11111111)
                         await modules.inventory.callbacks.inventory_item_selected(interaction, interaction_values[0],
                                                                                   category=custom_id_params[2],
                                                                                   page=int(custom_id_params[3]))

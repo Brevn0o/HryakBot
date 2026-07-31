@@ -1,3 +1,5 @@
+import ssl
+
 import aiohttp.client_exceptions
 import discord.errors
 import discord.interactions
@@ -26,18 +28,24 @@ async def send_callback(inter,
         view.add_item(component)
     if attachments is None:
         attachments = []
+    caller_attachments = list(attachments)
+    file_paths = []  # files we opened ourselves; a File can only be read once, so retries reopen them
     if embed is not None:
         if embed.thumbnail.url is not None and not embed.thumbnail.url.startswith(
                 ('http://', 'https://', 'attachment://')):
             original_embed_thumbnail_path = embed.thumbnail.url
+            file_paths.append(embed.thumbnail.url)
             attachments.append(discord.File(embed.thumbnail.url, filename=os.path.basename(embed.thumbnail.url)))
             embed.set_thumbnail(url=f'attachment://{os.path.basename(embed.thumbnail.url)}')
         if embed.image.url is not None and not embed.image.url.startswith(('http://', 'https://', 'attachment://')):
             original_embed_image_path = embed.thumbnail.url
+            file_paths.append(embed.image.url)
             attachments.append(discord.File(embed.image.url, filename=os.path.basename(embed.image.url)))
             embed.set_image(url=f'attachment://{os.path.basename(embed.image.url)}')
-    for _ in range(retries):
+    for attempt in range(retries):
         m = None
+        if attempt:
+            attachments = caller_attachments + [discord.File(p, filename=os.path.basename(p)) for p in file_paths]
         if not send_to_dm:
             try:
                 if ctx_message:
@@ -69,6 +77,8 @@ async def send_callback(inter,
                                 m = await inter.edit_original_response(content=content, embed=embed,
                                                                        view=view,
                                                                        attachments=attachments)
+                            except (ssl.SSLError, aiohttp.client_exceptions.ClientError):
+                                raise  # let the retry handler below deal with it
                             except Exception as e:
                                 print(e)
                         else:
@@ -83,8 +93,8 @@ async def send_callback(inter,
                         m = await inter.response.send_message(content, embed=embed, ephemeral=ephemeral,
                                                               view=view, files=attachments)
 
-            except aiohttp.client_exceptions.ClientOSError as e:
-                print(e)
+            except (aiohttp.client_exceptions.ClientError, ssl.SSLError) as e:
+                print(f'[send_callback] transient connection error, attempt {attempt + 1}/{retries}: {e}')
                 await asyncio.sleep(1)
                 continue
             except ValueError as e:

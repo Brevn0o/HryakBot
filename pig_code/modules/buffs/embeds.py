@@ -28,15 +28,13 @@ async def generate_basic_buffs_embed(inter, lang, thumbnail_url=None):
 async def generate_buffs_multipliers_embed(inter, lang, buff_type: str, thumbnail_url=None):
     title = None
     description = None
+    title = translate(hryak.locale.Locale.BuffTypes[buff_type], lang)
     match buff_type:
         case 'weight':
-            title = translate(Locales.Buffs.weight_buffs_title, lang)
             description = f'{translate(Locales.Buffs.weight_buffs_desc, lang)}\n\n'
         case 'pooping':
-            title = translate(Locales.Buffs.pooping_buffs_title, lang)
             description = f'{translate(Locales.Buffs.pooping_buffs_desc, lang)}\n\n'
         case 'vomit_chance':
-            title = translate(Locales.Buffs.vomit_chance_buffs_title, lang)
             description = f'{translate(Locales.Buffs.vomit_chance_desc, lang)}\n\n'
     base_multiplier_value_text = translate(Locales.Buffs.base_multiplier_value, lang,
                                            {'mult': round(hryak.config.base_buff_multipliers[buff_type] * 100)})

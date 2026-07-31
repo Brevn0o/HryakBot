@@ -5,9 +5,12 @@ from .....core import *
 
 async def eat(inter, item_id, update):
     lang = await User.get_language(inter.user.id)
-    await User.remove_item(inter.user.id, item_id)
-    scenario = random.randrange(4)
-    if scenario == 0:
+    response = await hryak.requests.post_requests.eat_poop(inter.user.id, item_id)
+    if response.get('status') == hryak.Status.NOT_ENOUGH_ITEMS:
+        await error_callbacks.not_enough_items(inter, item_id)
+        return
+    scenario = response.get('scenario')
+    if scenario == 'poisoned':
         await send_callback(inter, embed=eaten_and_poisoned(inter, lang),
                             components=[discord.ui.Button(
                                 label=translate(Locales.Global.pay, lang),
@@ -27,11 +30,12 @@ async def eat(inter, item_id, update):
             await inter.edit_original_response(embed=ran_away_from_doctor(inter, lang), view=None)
         elif interaction.data.get('custom_id') == 'in;pay':
             await interaction.response.defer()
-            if await Item.get_amount('coins', interaction.user.id) >= 5:
+            payment = await hryak.requests.post_requests.pay_doctor(interaction.user.id)
+            if payment.get('status') == hryak.Status.SUCCESS:
                 await inter.edit_original_response(embed=payed_the_doctor(inter, lang), view=None)
             else:
                 await inter.edit_original_response(embed=not_enough_money_for_doctor(inter, lang), view=None)
-    elif scenario == 1:
+    elif scenario == 'dizzy':
         await send_callback(inter, embed=generate_embed(
             title=translate(Locales.ItemUsed.ate_poop_and_dizzy_title, lang),
             description=f"{translate(Locales.ItemUsed.ate_poop_and_dizzy_desc, lang)}",
@@ -39,7 +43,7 @@ async def eat(inter, item_id, update):
             inter=inter,
         ), ephemeral=True, edit_original_response=False)
         await update(edit_followup=True)
-    elif scenario == 2:
+    elif scenario == 'question':
         await send_callback(inter, embed=generate_embed(
             title=translate(Locales.ItemUsed.ate_poop_and_dizzy_title, lang),
             description=f"{translate(Locales.ItemUsed.ate_poop_and_question_desc, lang)}",
@@ -47,7 +51,7 @@ async def eat(inter, item_id, update):
             inter=inter,
         ), ephemeral=True, edit_original_response=False)
         await update(edit_followup=True)
-    elif scenario == 3:
+    elif scenario == 'dad':
         await send_callback(inter, embed=generate_embed(
             title=translate(Locales.ItemUsed.ate_poop_and_dad_title, lang),
             description=f"{translate(Locales.ItemUsed.ate_poop_and_dad_desc, lang)}",

@@ -8,7 +8,7 @@ async def feed(inter):
     await DisUtils.pre_command_check(inter)
     lang = await User.get_language(inter.user.id)
     response = await hryak.requests.post_requests.feed(inter.user.id)
-    if response.get('status') == '400;not_ready':
+    if response.get('status') == hryak.Status.NOT_READY:
         await error_callbacks.default_error_callback(inter,
                                                      title=translate(Locales.ErrorCallbacks.pig_feed_cooldown_title,
                                                                      lang),
@@ -26,7 +26,7 @@ async def butcher(inter):
     await DisUtils.pre_command_check(inter)
     lang = await User.get_language(inter.user.id)
     response = await hryak.requests.post_requests.butcher(inter.user.id)
-    if response.get('status') == '400;not_ready':
+    if response.get('status') == hryak.Status.NOT_READY:
         await error_callbacks.default_error_callback(inter,
                                                      title=translate(Locales.ErrorCallbacks.pig_butcher_cooldown_title,
                                                                      lang),
@@ -36,7 +36,7 @@ async def butcher(inter):
                                                           'timestamp': response.get('try_again')}),
                                                      color=config.main_color, prefix_emoji='🥓')
         return
-    if response.get('status') == '400;no_item;knife':
+    if response.get('status') == hryak.Status.NO_ITEM_KNIFE:
         await error_callbacks.no_item(inter, 'knife', description=translate(Locales.Butcher.no_knife_desc,
                                                                             await User.get_language(inter.user.id)),
                                       thumbnail_url=await Item.get_image_path('knife', config.TEMP_FOLDER_PATH))

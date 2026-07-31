@@ -110,7 +110,7 @@ class AdminCommands(commands.Cog):
     @discord.app_commands.guilds(*[*config.ADMIN_GUILDS, *config.TEST_GUILDS, *config.PUBLIC_TEST_GUILDS])
     async def update_shop(self, inter):
         await DisUtils.pre_command_check(inter, owner_only=True)
-        await Shop.add_shop_state()
+        await Shop.update()
         await send_callback(inter, f'*Shop updated*')
 
     @discord.app_commands.command(description='Create a promo code')

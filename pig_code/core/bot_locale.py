@@ -373,16 +373,10 @@ class Locales:
                                    'ru': '- *Кажется, у вас нету никаких примененных баффов*'}
         buff_expires_in = {'en': '  - *Expires <t:{expiration_timestamp}:R>*',
                            'ru': '  - *Истекает <t:{expiration_timestamp}:R>*'}
-        weight_buffs_title = {'en': 'Weight gaining',
-                              'ru': 'Массо-набор'}
         weight_buffs_desc = {'en': "*Your weight gain multipliers are shown here*",
                              'ru': '*Здесь показываются множители вашего весо-набирания*'}
-        pooping_buffs_title = {'en': 'Manure quantity',
-                               'ru': 'Количество навоза'}
         pooping_buffs_desc = {'en': "*This shows the multipliers for how much manure the pig will produce per feeding*",
                               'ru': '*Здесь показываются множители того, сколько Хряк будет производить навоза за 1 кормежку*'}
-        vomit_chance_buffs_title = {'en': 'Chance of vomiting',
-                                    'ru': 'Шанс тошноты'}
         vomit_chance_desc = {'en': "*Here you can see the chance that the pig will vomit while feeding*",
                              'ru': '*Здесь показываются шанс того что Хряка стошнит при кормежке*'}
         base_multiplier_value = {'en': "Base value: **{mult}%**",
@@ -587,8 +581,6 @@ class Locales:
                 'ru': 'Продать'}
         run_away = {'en': 'Run away',
                     'ru': 'Сбежать'}
-        kg = {'en': 'kg',
-              'ru': 'кг'}
         pay = {'en': 'Pay',
                'ru': 'Заплатить'}
         preview = {'en': 'Preview',
@@ -773,8 +765,6 @@ class Locales:
                      'ru': 'Шаблоны'}
         creator = {'en': 'Creator',
                    'ru': 'Создатель'}
-        kilograms_short = {'en': 'kg',
-                           'ru': 'кг'}
         options = {'en': 'Options',
                    'ru': 'Настройки'}
         mentionable = {'en': 'Mentionable',

@@ -87,7 +87,7 @@ class Embeds:
                                          prefix_emoji: str = '📦', description='', fields_for_one_page: int = 7,
                                          list_type: str = 'inventory', tradable_items_only: bool = False,
                                          select_item_component_id: str = 'item_select;inventory', sort=True,
-                                         cat_as_title=False, client=None):
+                                         cat_as_title=False, client=None, category_keys: dict = None):
         complete_embeds = {}
         if sort:
             sorted_items = {}
@@ -173,8 +173,11 @@ class Embeds:
                                                                                              first_part=footer_first_part),
                                                                  footer_url=Func.generate_footer_url('user_avatar',
                                                                                                      inter.user))
+            # custom_ids carry the raw category key, not the translated label - it is shorter,
+            # ascii-only, and does not change with the user's language
             page_components = Components.generate_select_components_for_pages(options, select_item_component_id,
-                                                                         select_item_placeholder, category=cat,
+                                                                         select_item_placeholder,
+                                                                         category=(category_keys or {}).get(cat, cat),
                                                                          fields_for_one=fields_for_one_page)
             for i, embed in enumerate(page_embeds):
                 complete_embeds[cat]['embeds'].append({'embed': embed, 'components': page_components[i]})

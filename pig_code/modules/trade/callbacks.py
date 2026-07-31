@@ -21,9 +21,13 @@ async def trade(inter, user1, user2, trade_id: str = None, pre_command_check: bo
                                                                    lang),
                                                          translate(Locales.ErrorCallbacks.bot_as_trade_user_desc, lang))
             return
-    if response.get('status') == '400;no_trade_id':
+    if response.get('status') == hryak.Status.NO_TRADE_ID:
         m = await send_callback(inter, '🔃')
         trade_id = str(m.id)
+        try:
+            m = await inter.channel.fetch_message(m.id)
+        except discord.HTTPException:
+            pass
         await Trade.create(trade_id, user1.id, user2.id, m)
         response = await hryak.requests.trade_requests.trade(user1.id, user2.id, trade_id)
         await DisUtils.send_notification(user2, inter,
@@ -37,7 +41,7 @@ async def trade(inter, user1, user2, trade_id: str = None, pre_command_check: bo
     if await Trade.get_message(trade_id) is None:
         await error_callbacks.cannot_use_command_in_this_channel(inter)
         return
-    if response.get('trade_status') == 'in_process':
+    if response.get('trade_status') == hryak.TradeStatus.IN_PROCESS:
         try:
             await inter.response.defer()
         except discord.InteractionResponded:
@@ -77,9 +81,9 @@ async def trade(inter, user1, user2, trade_id: str = None, pre_command_check: bo
                             components=[add_item_component,
                                         agree_component, cancel_component, clear_component])
         return
-    elif response.get('trade_status') == 'tax_processing':
+    elif response.get('trade_status') == hryak.TradeStatus.TAX_PROCESSING:
         response = await hryak.requests.trade_requests.trade(user1.id, user2.id, trade_id)
-        if response.get('trade_status') == 'tax_processing':
+        if response.get('trade_status') == hryak.TradeStatus.TAX_PROCESSING:
             description = f'{translate(Locales.Trade.tax_splitting_process_desc, lang)}\n'
             for currency, amount in response['total_tax'].items():
                 description += f'\n> {await Item.get_emoji(currency)}・{await Item.get_name(currency, lang)} x{amount}'
@@ -109,9 +113,9 @@ async def trade(inter, user1, user2, trade_id: str = None, pre_command_check: bo
                                                      ),
                                 components=components)
             return
-    if response.get('trade_status') == 'tax_processing_success':
+    if response.get('trade_status') == hryak.TradeStatus.TAX_PROCESSING_SUCCESS:
         response = await hryak.requests.trade_requests.trade(user1.id, user2.id, trade_id)
-    if response.get('trade_status') == 'success':
+    if response.get('trade_status') == hryak.TradeStatus.SUCCESS:
         await send_callback(await Trade.get_message(trade_id), embed=generate_embed(translate(Locales.Trade.scd_title, lang),
                                                                               description=translate(
                                                                                   Locales.Trade.scd_desc, lang,

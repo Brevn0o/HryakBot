@@ -55,8 +55,8 @@ async def duel(inter, opponent, bet):
     if interaction.data.get('custom_id') == 'in;accept':
         await interaction.response.defer(ephemeral=True)
         response = await hryak.requests.duel_requests.duel(inter.user.id, opponent.id, bet)
-        if response.get('status') == '400;no_money':
-            broke_user = await User.get_user(inter.client, response.get('user_id'))
+        if response.get('status') == hryak.Status.NO_MONEY:
+            broke_user = await User.get_discord_user(inter.client, response.get('user_id'))
             await error_callbacks.default_error_callback(inter, translate(Locales.Duel.duel_canceled_title, lang),
                                                          translate(Locales.Duel.no_money_for_bet_desc, lang,
                                                                    format_options={'user': broke_user.display_name}))

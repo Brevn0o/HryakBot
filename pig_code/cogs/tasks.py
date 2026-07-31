@@ -22,24 +22,13 @@ class Tasks(commands.Cog):
     async def process_streaks(self):
         await self.client.wait_until_ready()
         await asyncio.sleep(10)
-        users = await Tech.get_all_users(where=f"JSON_EXTRACT(stats, '$.streak') > 0")
-        for user_id in users:
-            if await hryak.GameFunc.calculate_missed_streak_days(user_id) > 1:
-                await Stats.set_streak(user_id, 0)
-            await asyncio.sleep(1)
+        await hryak.GameFunc.reset_expired_streaks()
 
     @tasks.loop(seconds=60)
     async def daily_shop_update(self):
         await self.client.wait_until_ready()
         await asyncio.sleep(10)
-        last_update_timestamp = await Shop.get_update_timestamp()
-        if config.TEST:
-            await Shop.add_shop_state()
-        if last_update_timestamp is None:
-            await Shop.add_shop_state()
-        elif last_update_timestamp < int(
-                datetime.datetime.combine(datetime.date.today(), datetime.time(0, 0)).timestamp()):
-            await Shop.add_shop_state()
+        await Shop.update_if_needed()
 
     @tasks.loop(seconds=300)
     async def give_items(self):
@@ -62,7 +51,7 @@ class Tasks(commands.Cog):
             user_id = await Order.get_user(order_id)
             lang = await User.get_language(user_id)
             if await Order.get_status(order_id) in ['success', 'hold']:
-                await DisUtils.send_notification(await User.get_user(self.client, user_id),
+                await DisUtils.send_notification(await User.get_discord_user(self.client, user_id),
                                                  title=translate(Locales.PremiumShop.item_give_notification_title, lang),
                                                  description=translate(Locales.PremiumShop.item_give_notification_desc,
                                                                        lang, {'items': await DisUtils.get_items_in_str_list(
