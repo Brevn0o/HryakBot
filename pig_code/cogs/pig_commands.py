@@ -8,12 +8,14 @@ class PigCommands(commands.Cog):
         self.client = client
 
     @discord.app_commands.command(description=locale_str("feed-desc"))
+    @discord.app_commands.checks.cooldown(1, 5, key=lambda i: (i.user.id,))
     @discord.app_commands.user_install()
     @discord.app_commands.guild_install()
     async def feed(self, inter):
         await modules.pig.callbacks.feed(inter)
 
     @discord.app_commands.command(description=locale_str("butcher-desc"))
+    @discord.app_commands.checks.cooldown(1, 5, key=lambda i: (i.user.id,))
     @discord.app_commands.user_install()
     @discord.app_commands.guild_install()
     async def butcher(self, inter):
