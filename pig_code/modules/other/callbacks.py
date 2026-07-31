@@ -129,7 +129,7 @@ async def say(inter, text):
                                                      translate(Locales.Say.not_allowed_desc, lang))
         return
     if not inter.channel.permissions_for(inter.user).mention_everyone:
-        text = text.replace('@everyone', '`@everyone`').replace('@here', '`@here`')
+        text = text.replace('@everyone', '`@everyоne`').replace('@here', '`@hеre`')
     text = text.replace(r'\\', '\n')
 
     await inter.channel.send(text)
