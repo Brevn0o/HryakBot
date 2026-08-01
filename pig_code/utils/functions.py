@@ -168,18 +168,18 @@ class Func:
             return response.json()['data']['media']
 
     @staticmethod
-    def get_changed_page_number(total_pages, cur_page, differ):
-        if differ > 0:
-            if cur_page + differ > total_pages:
-                cur_page = 1
+    def get_changed_page_number(total_pages, current_page, dif):
+        if dif > 0:
+            if current_page + dif > total_pages:
+                current_page = 1
             else:
-                cur_page += differ
-        elif differ < 0:
-            if cur_page + differ < 1:
-                cur_page = total_pages
+                current_page += dif
+        elif dif < 0:
+            if current_page + dif < 1:
+                current_page = total_pages
             else:
-                cur_page += differ
-        return cur_page
+                current_page += dif
+        return current_page
 
     @staticmethod
     def startswith_list(string, lst: list[str]) -> bool:
@@ -203,13 +203,6 @@ class Func:
                     await channel.edit(name=str(re.sub(r'\d+', str(servers), str(channel))))
                 except:
                     pass
-
-    @staticmethod
-    def get_number_of_possible_skin_variations():
-        num = 1
-        for cat in os.listdir('bin/images'):
-            num *= len(os.listdir(f'bin/images/{cat}'))
-        return num
 
     @staticmethod
     def send_data_to_sdc(client, shards: int = 1):

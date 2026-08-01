@@ -41,7 +41,7 @@ async def user_won(inter, lang, user_id: int, money_earned: int, gif_url: str) -
     embed = generate_embed(
         title=translate(Locales.Duel.fight_ended_title, lang),
         description=translate(Locales.Duel.fight_ended_desc, lang,
-                              {'pig': await Pig.get_name(user_id), 'user': f'<@&{user_id}>', 'money_earned': money_earned}),
+                              {'pig': await Pig.get_name(user_id), 'user': f'<@{user_id}>', 'money_earned': money_earned}),
         thumbnail_url=gif_url,
         prefix=Func.generate_prefix('🎉'),
         inter=inter

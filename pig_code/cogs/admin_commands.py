@@ -61,6 +61,14 @@ class AdminCommands(commands.Cog):
         await User.set_block_reason(user.id, '')
         await send_callback(inter, f'*User **{user}** has been unblocked*')
 
+    @discord.app_commands.command(description='Get amount of possible skin variations')
+    @discord.app_commands.guilds(*[*config.ADMIN_GUILDS, *config.TEST_GUILDS])
+    @commands.is_owner()
+    async def skin_variations(self, inter):
+        await DisUtils.pre_command_check(inter, owner_only=True)
+        variations = await hryak.GameFunc.get_number_of_possible_skin_variations()
+        await send_callback(inter, f'*There are **{variations:,}** possible skin variations*')
+
     @discord.app_commands.command(description='Add item to user\'s inventory')
     @discord.app_commands.guilds(*[*config.ADMIN_GUILDS, *config.TEST_GUILDS, *config.PUBLIC_TEST_GUILDS])
     async def add_item(self, inter, user: discord.User, item_id: str, amount: int = 1):
