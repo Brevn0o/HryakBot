@@ -1,8 +1,9 @@
 import os
 from dotenv import load_dotenv
-from .imports import *
 
 load_dotenv()
+
+from .imports import *
 
 
 def get_env(key, value_type=None):
@@ -61,6 +62,14 @@ TEMP_FOLDER_PATH = get_env('TEMP_FOLDER_PATH')
 DEBUGGER_WEBHOOK = get_env('DEBUGGER_WEBHOOK')
 REPORT_WEBHOOKS = get_env('REPORT_WEBHOOKS', list)
 
+# redis - optional shared cache, so several bots see the same data
+REDIS_HOST = get_env('REDIS_HOST')
+REDIS_PORT = get_env('REDIS_PORT', int) if get_env('REDIS_PORT') else 6379
+REDIS_PASSWORD = get_env('REDIS_PASSWORD')
+REDIS_SSL = get_env('REDIS_SSL', bool) if get_env('REDIS_SSL') else False  # true for rediss://
+REDIS_SSL_VERIFY = get_env('REDIS_SSL_VERIFY', bool) if get_env('REDIS_SSL_VERIFY') else False
+REDIS_DB = get_env('REDIS_DB', int) if get_env('REDIS_DB') else 0
+
 # db
 mysql_info = {
     'host': get_env('DB_HOST'),
@@ -87,6 +96,9 @@ hryak.Func.add_log = _disabled_add_log
 hryak.db_api.connection.pool.set_config(**mysql_info)
 
 setters.set_platform('discord')
+if REDIS_HOST:
+    setters.set_redis_cache(REDIS_HOST, REDIS_PORT, db=REDIS_DB, password=REDIS_PASSWORD,
+                            ssl=REDIS_SSL, ssl_verify=REDIS_SSL_VERIFY)
 setters.set_test_mode(TEST)
 setters.set_bot_guilds(BOT_GUILDS)
 setters.set_temp_folder_path(TEMP_FOLDER_PATH)
