@@ -221,6 +221,17 @@ item_components = {
                                        'ru': '*Вы настолько опьянели что начали громко петь песню "Синий трактор"*'},
                                    'prefix': '🥴'
                                    }}},
+    'tequila': {'eat': {'label': {'en': 'Drink',
+                                  'ru': 'Выпить'},
+                      'color': discord.ButtonStyle.primary,
+                      'func': item_remove,
+                      'callback': {'title': {'en': 'You drank a tequila',
+                                             'ru': 'Вы выпили текилу'},
+                                   'description': {
+                                       'en': '*Now you are in the mood to climb the US border*',
+                                       'ru': '*Теперь вы в настроении чтобы перелезть через границу США*'},
+                                   'prefix': '🌮'
+                                   }}},
     # 'common_case': {'open': case_comp()},
     # 'rare_case': {'open': case_comp()}
 }
