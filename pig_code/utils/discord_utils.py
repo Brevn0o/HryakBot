@@ -559,9 +559,7 @@ class DisUtils:
             await Guild.register_guild_if_not_exists(inter.guild.id)
         if not await Stats.get_language_changed(inter.user.id) and language_check:
             lang = str(inter.locale)
-            if lang in ['ru', 'uk']:
-                lang = 'ru'
-            else:
+            if lang not in bot_locale.valid_discord_locales:
                 lang = 'en'
             await User.set_language(inter.user.id, lang)
             await Stats.set_language_changed(inter.user.id, True)

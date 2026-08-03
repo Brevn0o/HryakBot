@@ -21,11 +21,13 @@ class Translator(discord.app_commands.Translator):
                                 discord.app_commands.TranslationContextLocation.choice_name]:
             if string.message not in Locales.app_commands_locales:
                 return string.message
-            if locale in [discord.Locale.russian, discord.Locale.ukrainian]:
-                return translate(Locales.app_commands_locales[string.message], 'ru')
-            elif locale in [discord.Locale.american_english, discord.Locale.british_english]:
-                return translate(Locales.app_commands_locales[string.message], 'en')
-            return translate(Locales.app_commands_locales[string.message], 'en')
+            if locale is discord.Locale.ukrainian:
+                lang = 'uk'
+            elif locale is discord.Locale.russian:
+                lang = 'ru'
+            else:
+                lang = 'en'
+            return translate(Locales.app_commands_locales[string.message], lang)
         return None
 
 
