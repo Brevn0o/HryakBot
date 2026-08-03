@@ -70,7 +70,7 @@ class Locales:
                         'uk': 'Перейменувати свого хряка'},
         'rename-name-name': {'en': 'name',
                              'ru': 'имя',
-                             'uk': "ім'я"},
+                             'uk': 'кличка'},
         'rename-name-desc': {'en': 'Choose a new name for your pig',
                              'ru': 'Новое имя для свинтуса',
                              'uk': "Нове ім'я для свинтуса"},
@@ -202,7 +202,7 @@ class Locales:
                                       'uk': 'Налаштування команди /leaderboard'},
         'settings-top-participate-name': {'en': 'participate',
                                              'ru': 'участвовать',
-                                             'uk': 'брати участь'},
+                                             'uk': 'участь'},
         'settings-top-participate-desc': {'en': 'Just choose yes or no',
                                                   'ru': 'Просто выбери да или нет',
                                                   'uk': 'Просто обери так чи ні'},
@@ -593,9 +593,9 @@ class Locales:
             'uk': 'Нова мова бота: **Українська**'
         }
         scd_desc = {
-            'en': 'Now the bot will speak the language of freedom 🦅🦅',
-            'ru': 'Теперь бот будет говорить на великом и могучем 💪',
-            'uk': "Тепер бот говоритиме солов'їною 🇺🇦"
+            'en': '*Now the bot will speak the language of freedom 🦅🦅*',
+            'ru': '*Теперь бот будет говорить на великом и могучем 💪*',
+            'uk': "*Тепер бот говоритиме солов'їною 🇺🇦*"
         }
 
     class PromoCode:

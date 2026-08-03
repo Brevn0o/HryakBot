@@ -47,12 +47,7 @@ class Tasks(commands.Cog):
 
     @tasks.loop(seconds=30)
     async def process_orders(self):
-        print(12312312312)
         for order_id in await Order.get_all_orders():
-            print(2222, order_id)
-            print(3333)
-            print(1111, await Order.get_status(order_id, fetch=True))
-            print(33333)
             user_id = await Order.get_user(order_id)
             lang = await User.get_language(user_id)
             order_status = await Order.get_status(order_id, fetch=True)

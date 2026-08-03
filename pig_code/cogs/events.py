@@ -41,13 +41,9 @@ class Events(commands.Cog):
             try:
                 await self.client.tree.sync(guild=discord.Object(id=guild_id))
             except discord.errors.Forbidden:
+                print(111111113123123123123123123123)
                 pass
-        for guild in self.client.guilds:
-            if guild.id not in [*config.ADMIN_GUILDS, *config.TEST_GUILDS, *config.PUBLIC_TEST_GUILDS]:
-                try:
-                    await self.client.tree.sync(guild=guild)
-                except discord.errors.Forbidden:
-                    pass
+        print('> Admin guilds are synced')
         await self.client.tree.sync()
         print('> Tree is synced')
 
