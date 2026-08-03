@@ -41,7 +41,6 @@ class Events(commands.Cog):
             try:
                 await self.client.tree.sync(guild=discord.Object(id=guild_id))
             except discord.errors.Forbidden:
-                print(111111113123123123123123123123)
                 pass
         print('> Admin guilds are synced')
         await self.client.tree.sync()
