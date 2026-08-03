@@ -27,7 +27,7 @@ class Events(commands.Cog):
         await Setup.create_shop_table()
         await Setup.create_promo_code_table()
         print('> Tables are created')
-        await Guild.register([guild.id for guild in self.client.guilds])
+        await Guild.register([(guild.id, Func.guess_guild_language(guild)) for guild in self.client.guilds])
         print('> Guilds are registered')
         await Pig.fix_pig_structure_for_all_users()
         print('> Pig structures are fixed')
@@ -45,6 +45,8 @@ class Events(commands.Cog):
         print('> Admin guilds are synced')
         await self.client.tree.sync()
         print('> Tree is synced')
+        print(f'> Server pig messages are updated: '
+              f'{await modules.guild_pig.callbacks.update_all_messages(self.client)}')
 
     @commands.Cog.listener()
     async def on_interaction(self, interaction):
@@ -201,6 +203,16 @@ class Events(commands.Cog):
                                                                 await Trade.get_user(interaction.client, trade_id, 1),
                                                                 trade_id=trade_id,
                                                                 pre_command_check=False)
+                if custom_id_params[0] == 'guild_pig':
+                    if custom_id_params[1] == 'feed':
+                        await modules.guild_pig.callbacks.feed(interaction)
+                    elif custom_id_params[1] == 'help':
+                        await modules.guild_pig.callbacks.help_(interaction)
+                    elif custom_id_params[1] == 'action':
+                        if interaction_values[0] == 'top':
+                            await modules.guild_pig.callbacks.top(interaction, pre_command_check=False,
+                                                                  ephemeral=True)
+                    return
                 if custom_id_params[0] in ['like', 'dislike']:
                     if custom_id_params[0] == 'like':
                         await User.append_rate(custom_id_params[1], interaction.user.id, 1)
@@ -335,7 +347,7 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild: discord.Guild):
-        await Guild.register_guild_if_not_exists(guild.id)
+        await Guild.register_guild_if_not_exists(guild.id, Func.guess_guild_language(guild))
         await guild.chunk()
         await hryak.Func.add_log('guild_join',
                      owner_id=guild.owner_id,

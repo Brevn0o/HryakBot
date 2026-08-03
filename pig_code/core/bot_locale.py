@@ -206,6 +206,27 @@ class Locales:
         'settings-top-participate-desc': {'en': 'Just choose yes or no',
                                                   'ru': 'Просто выбери да или нет',
                                                   'uk': 'Просто обери так чи ні'},
+        'server-top-desc': {'en': 'See the top servers by the weight of their pig',
+                            'ru': 'Посмотреть топ серверов по весу их хряка',
+                            'uk': 'Переглянути топ серверів за вагою їхнього хряка'},
+        'server-language-desc': {'en': "Change the language the server's own messages use",
+                                 'ru': 'Изменить язык, на котором бот говорит на сервере',
+                                 'uk': 'Змінити мову, якою бот говорить на сервері'},
+        'server-language-language-name': {'en': 'language',
+                                          'ru': 'язык',
+                                          'uk': 'мова'},
+        'server-language-language-desc': {'en': 'The language the server pig will speak',
+                                          'ru': 'Язык, на котором будет говорить серверный хряк',
+                                          'uk': 'Мова, якою говоритиме серверний хряк'},
+        'server-pig-setup-desc': {'en': 'Choose a channel for the server pig to live in',
+                                  'ru': 'Выбрать канал, в котором будет жить серверный хряк',
+                                  'uk': 'Обрати канал, у якому житиме серверний хряк'},
+        'server-pig-setup-channel-name': {'en': 'channel',
+                                          'ru': 'канал',
+                                          'uk': 'канал'},
+        'server-pig-setup-channel-desc': {'en': 'The channel the server pig will live in',
+                                          'ru': 'Канал, в котором будет жить серверный хряк',
+                                          'uk': 'Канал, у якому житиме серверний хряк'},
     }
 
     user_install_content = {
@@ -570,6 +591,118 @@ class Locales:
         scd_content = {'en': '*Participation settings for the `/top` command have been changed and set to `{value}`*',
                     'ru': '*Настройки участия для команды `/top` изменены и выставлены на `{value}`*',
                     'uk': '*Налаштування участі для команди `/top` змінено та виставлено на `{value}`*'}
+
+    class GuildPigSetup:
+        scd_title = {'en': 'The server pig has moved in',
+                     'ru': 'Серверный хряк заселился',
+                     'uk': 'Серверний хряк заселився'}
+        scd_desc = {'en': '*From now on **{pig}** lives in {channel}*\n\n'
+                          '- Sending messages there has been turned off for everyone, so the pig has room to breathe',
+                    'ru': '*Отныне **{pig}** живёт в {channel}*\n\n'
+                          '- Отправка сообщений там отключена для всех, чтобы хряку было где развернуться',
+                    'uk': '*Відтепер **{pig}** живе в {channel}*\n\n'
+                          '- Надсилання повідомлень там вимкнено для всіх, щоб хряку було де розвернутися'}
+        no_permissions_title = {'en': 'Not enough rights',
+                                'ru': 'Не хватает прав',
+                                'uk': 'Не вистачає прав'}
+        no_permissions_desc = {'en': '*I need **Manage Channels** and **Send Messages** in {channel} to settle the pig there*',
+                               'ru': '*Мне нужны права **Управлять каналами** и **Отправлять сообщения** в {channel}, чтобы поселить туда хряка*',
+                               'uk': '*Мені потрібні права **Керувати каналами** та **Надсилати повідомлення** в {channel}, щоб поселити туди хряка*'}
+        cant_create_desc = {'en': '*I need the **Manage Channels** right to make a channel for the pig*\n\n'
+                                  '- Or pass a channel yourself, and I will settle the pig in that one',
+                            'ru': '*Мне нужно право **Управлять каналами**, чтобы создать канал для хряка*\n\n'
+                                  '- Либо укажите канал сами, и я поселю хряка в нём',
+                            'uk': '*Мені потрібне право **Керувати каналами**, щоб створити канал для хряка*\n\n'
+                                  '- Або вкажіть канал самі, і я поселю хряка в ньому'}
+
+    class SetServerLanguage:
+        scd_title = {
+            'en': 'New server language: **English**',
+            'ru': 'Новый язык сервера: **Русский**',
+            'uk': 'Нова мова сервера: **Українська**'
+        }
+        scd_desc = {
+            'en': '*From now on the pig speaks the language of freedom on this server 🦅🦅*',
+            'ru': '*Отныне на этом сервере хряк говорит на великом и могучем 💪*',
+            'uk': "*Відтепер на цьому сервері хряк говорить солов'їною 🇺🇦*"
+        }
+
+    class GuildPig:
+        message_title = {'en': '{pig}',
+                         'ru': '{pig}',
+                         'uk': '{pig}'}
+        message_desc = {'en': '> Weight: **{weight}** {kg}\n'
+                              '> Last fed: {last_feed}',
+                        'ru': '> Вес: **{weight}** {kg}\n'
+                              '> Последняя кормёжка: {last_feed}',
+                        'uk': '> Вага: **{weight}** {kg}\n'
+                              '> Останнє годування: {last_feed}'}
+        never_fed = {'en': '*nobody yet*',
+                     'ru': '*ещё никто*',
+                     'uk': '*ще ніхто*'}
+        actions_placeholder = {'en': 'More actions',
+                               'ru': 'Другие действия',
+                               'uk': 'Інші дії'}
+        top_title = {'en': 'Server top',
+                     'ru': 'Топ серверов',
+                     'uk': 'Топ серверів'}
+        top_desc = {'en': '*Here we have the fattest server pigs in the world*',
+                    'ru': '*Здесь у нас самые жирные серверные хряки в мире*',
+                    'uk': '*Тут у нас найжирніші серверні хряки у світі*'}
+        top_your_position = {'en': "*Your server's place: **{place}***",
+                             'ru': '*Место вашего сервера: **{place}***',
+                             'uk': '*Місце вашого сервера: **{place}***'}
+        top_empty = {'en': '*No server has settled a pig in yet*',
+                     'ru': '*Пока ни один сервер не завёл хряка*',
+                     'uk': '*Поки жоден сервер не завів хряка*'}
+        feed_btn = {'en': 'Feed',
+                    'ru': 'Покормить',
+                    'uk': 'Погодувати'}
+        help_btn = {'en': 'How it works',
+                    'ru': 'Как это работает',
+                    'uk': 'Як це працює'}
+        fed_title = {'en': 'You fed **{pig}**',
+                     'ru': 'Вы покормили **{pig}**',
+                     'uk': 'Ви погодували **{pig}**'}
+        fed_desc = {'en': '*The pig gained **{weight_added}** {kg} and now weighs **{weight}** {kg}*\n\n'
+                          '- You can feed a server pig again **<t:{try_again}:R>**',
+                    'ru': '*Хряк набрал **{weight_added}** {kg} и теперь весит **{weight}** {kg}*\n\n'
+                          '- Покормить серверного хряка снова можно **<t:{try_again}:R>**',
+                    'uk': '*Хряк набрав **{weight_added}** {kg} і тепер важить **{weight}** {kg}*\n\n'
+                          '- Погодувати серверного хряка знову можна **<t:{try_again}:R>**'}
+        not_ready_title = {'en': 'Not so fast',
+                           'ru': 'Не так быстро',
+                           'uk': 'Не так швидко'}
+        not_ready_desc = {'en': '*You can only feed a server pig once every 12 hours*\n\n'
+                                '- This cooldown is shared across every server\n'
+                                '- Try again **<t:{try_again}:R>**',
+                          'ru': '*Кормить серверного хряка можно раз в 12 часов*\n\n'
+                                '- Этот кулдаун общий для всех серверов\n'
+                                '- Попробуйте снова **<t:{try_again}:R>**',
+                          'uk': '*Годувати серверного хряка можна раз на 12 годин*\n\n'
+                                '- Цей кулдаун спільний для всіх серверів\n'
+                                '- Спробуйте знову **<t:{try_again}:R>**'}
+        help_title = {'en': 'The server pig',
+                      'ru': 'Серверный хряк',
+                      'uk': 'Серверний хряк'}
+        help_desc = {'en': '*This pig belongs to the whole server, and grows on what everyone feeds it*\n\n'
+                           '1. Press **Feed** to add some weight to it\n'
+                           '2. You can feed **one** server pig every 12 hours, anywhere - so it is worth '
+                           'thinking about which server you want to grow\n'
+                           '3. The more you feed, the bigger your share of the weekly reward\n\n'
+                           '> Your own pig in </feed:1118970976282095676> is a separate one, and is not affected',
+                     'ru': '*Этот хряк принадлежит всему серверу и растёт на том, чем его кормят*\n\n'
+                           '1. Нажмите **Покормить**, чтобы добавить ему веса\n'
+                           '2. Кормить можно **одного** серверного хряка раз в 12 часов, где угодно - так что '
+                           'стоит подумать, какой сервер вы хотите растить\n'
+                           '3. Чем больше кормите, тем больше ваша доля еженедельной награды\n\n'
+                           '> Ваш собственный хряк в </feed:1118970976282095676> - отдельный, его это не касается',
+                     'uk': '*Цей хряк належить усьому серверу і росте на тому, чим його годують*\n\n'
+                           '1. Натисніть **Погодувати**, щоб додати йому ваги\n'
+                           '2. Годувати можна **одного** серверного хряка раз на 12 годин, будь-де - тож '
+                           'варто подумати, який сервер ви хочете ростити\n'
+                           '3. Чим більше годуєте, тим більша ваша частка щотижневої нагороди\n\n'
+                           '> Ваш власний хряк у </feed:1118970976282095676> - окремий, його це не стосується'}
 
     class Report:
         title = {

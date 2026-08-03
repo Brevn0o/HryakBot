@@ -121,6 +121,32 @@ class Func:
         return footer_url
 
     @staticmethod
+    def guess_guild_language(guild=None, user=None):
+        """Best guess at what language a server speaks, as one of valid_discord_locales.
+
+        Only community servers can actually set preferred_locale - everything else reports
+        en-US - so a non-English locale is trusted outright, and anything else falls
+        through to the names the server and the person setting it up go by. Cyrillic that
+        could be either language is read as russian, the bigger half of the userbase.
+        """
+        locales = {discord.Locale.ukrainian: 'uk', discord.Locale.russian: 'ru'}
+        preferred_locale = getattr(guild, 'preferred_locale', None)
+        if preferred_locale in locales:
+            return locales[preferred_locale]
+        texts = [getattr(guild, 'name', None), getattr(guild, 'description', None),
+                 getattr(user, 'display_name', None), getattr(user, 'global_name', None)]
+        text = ' '.join(str(text) for text in texts if text)
+        if any(letter in text for letter in 'іїєґІЇЄҐ'):
+            return 'uk'
+        if any(letter in text for letter in 'ыэъёЫЭЪЁ'):
+            return 'ru'
+        if any('Ѐ' <= letter <= 'ӿ' for letter in text):
+            return 'ru'
+        if str(preferred_locale) in bot_locale.valid_discord_locales:
+            return str(preferred_locale)
+        return 'en'
+
+    @staticmethod
     def generate_prefix(prefix: str = 'scd', sep: str = '・', backticks: bool = False):
         if prefix is None or not prefix:
             return ''

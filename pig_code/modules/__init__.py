@@ -7,3 +7,4 @@ from . import top
 from . import duel
 from . import trade
 from . import buffs
+from . import guild_pig

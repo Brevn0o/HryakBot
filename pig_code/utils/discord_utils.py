@@ -556,7 +556,8 @@ class DisUtils:
             except asyncio.TimeoutError:
                 print("> Chunking took too long and was stopped")
         if inter.guild is not None:
-            await Guild.register_guild_if_not_exists(inter.guild.id)
+            await Guild.register_guild_if_not_exists(
+                inter.guild.id, Func.guess_guild_language(inter.guild, inter.user))
         if not await Stats.get_language_changed(inter.user.id) and language_check:
             lang = str(inter.locale)
             if lang not in bot_locale.valid_discord_locales:

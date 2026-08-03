@@ -153,6 +153,18 @@ async def settings_say(inter, allow: bool):
     await Guild.allow_say(inter.guild.id, allow)
     await send_callback(inter, content=translate(Locales.SettingsSay.scd_content, lang, {'value': str(allow).lower()}))
 
+async def set_server_language(inter, lang):
+    from ..guild_pig import callbacks as guild_pig_callbacks
+    await DisUtils.pre_command_check(inter, language_check=False)
+    await Guild.set_language(inter.guild.id, lang)
+    # the pig's message belongs to the server, so it changes language with it
+    await guild_pig_callbacks.update_message(inter.client, inter.guild.id)
+    await send_callback(inter, embed=generate_embed(title=translate(Locales.SetServerLanguage.scd_title, lang),
+                                                    description=translate(Locales.SetServerLanguage.scd_desc, lang),
+                                                    prefix=Func.generate_prefix('scd'),
+                                                    inter=inter))
+
+
 async def settings_top(inter, participate: bool):
     await DisUtils.pre_command_check(inter, language_check=False)
     lang = await User.get_language(inter.user.id)
