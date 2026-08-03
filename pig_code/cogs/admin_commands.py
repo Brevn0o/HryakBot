@@ -128,7 +128,7 @@ class AdminCommands(commands.Cog):
 
     @discord.app_commands.command(description='Transfer User Data')
     @discord.app_commands.guilds(*[*config.ADMIN_GUILDS, *config.TEST_GUILDS])
-    async def transfer_account(self, inter, from_user: discord.User, to_user: discord.User, overwrite: bool = False):
+    async def transfer_account(self, inter, from_user: discord.User, to_user: discord.User, overwrite: bool):
         await DisUtils.pre_command_check(inter, owner_only=True)
         response = await User.transfer_data(from_user.id, to_user.id, overwrite=overwrite)
         await send_callback(inter, f'*Data was transferred from **{from_user.name}** to **{to_user.name}***\n\nResponse: {response}*')
