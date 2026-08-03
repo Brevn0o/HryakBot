@@ -126,6 +126,13 @@ class AdminCommands(commands.Cog):
         await Shop.update()
         await send_callback(inter, f'*Shop updated*')
 
+    @discord.app_commands.command(description='Transfer User Data')
+    @discord.app_commands.guilds(*[*config.ADMIN_GUILDS, *config.TEST_GUILDS])
+    async def transfer_account(self, inter, from_user: discord.User, to_user: discord.User, overwrite: bool = False):
+        await DisUtils.pre_command_check(inter, owner_only=True)
+        print(await User.transfer_data(from_user.id, to_user.id, overwrite=overwrite))
+        await send_callback(inter, f'*Data was transferred from **{from_user.name}** to **{to_user.name}***')
+
     @discord.app_commands.command(description='Create a promo code')
     @discord.app_commands.describe(
         prise='Items that user will receive | Has to be json | Ex: {"coins": 10, "rare_case": 2}')
