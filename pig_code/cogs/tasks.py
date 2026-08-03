@@ -8,7 +8,7 @@ class Tasks(commands.Cog):
         self.client = client
         self.daily_shop_update.start()
         self.process_streaks.start()
-        # self.process_orders.start()
+        self.process_orders.start()
         if not config.TEST:
             self.monitoring_data_update.start()
 
@@ -45,12 +45,21 @@ class Tasks(commands.Cog):
                 await User.set_item_amount(user_id, item_id, 0)
                 await asyncio.sleep(.1)
 
-    @tasks.loop(seconds=5)
+    @tasks.loop(seconds=30)
     async def process_orders(self):
+        print(12312312312)
         for order_id in await Order.get_all_orders():
+            print(2222, order_id)
+            print(3333)
+            print(1111, await Order.get_status(order_id, fetch=True))
+            print(33333)
             user_id = await Order.get_user(order_id)
             lang = await User.get_language(user_id)
-            if await Order.get_status(order_id) in ['success', 'hold']:
+            order_status = await Order.get_status(order_id, fetch=True)
+            if (hryak.functions.Func.generate_current_timestamp() - await Order.get_timestamp(order_id) > (60 * 60 * 24 * 3) or
+                    order_status == 'failed'):
+                await Order.delete(order_id)
+            if order_status in ['completed', 'success', 'hold']:
                 await DisUtils.send_notification(await User.get_discord_user(self.client, user_id),
                                                  title=translate(Locales.PremiumShop.item_give_notification_title, lang),
                                                  description=translate(Locales.PremiumShop.item_give_notification_desc,
@@ -58,13 +67,14 @@ class Tasks(commands.Cog):
                                                       await Order.get_items(order_id),
                                                       await User.get_language(user_id))}),
                                                  prefix_emoji='💎')
-                for item_id, amount in await Order.get_items(order_id).items():
+                for item_id, amount in (await Order.get_items(order_id)).items():
                     await User.add_item(user_id, item_id, amount)
                 await Stats.add_successful_orders(user_id, 1)
                 await Stats.add_dollars_donated(user_id, round(
                     await Order.get_amount(order_id) / hryak.config.currency_to_usd[await Order.get_currency(order_id)], 2))
                 await Order.delete(order_id)
-            await asyncio.sleep(.3)
+                await asyncio.sleep(1)
+                continue
 
     @tasks.loop(seconds=3600)
     async def monitoring_data_update(self):

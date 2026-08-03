@@ -11,6 +11,8 @@ def get_env(key, value_type=None):
     if value_type:
         if value_type == list:
             return eval(value)
+        elif value_type == dict:
+            return eval(value)
         elif value_type == bool:
             return value.lower() in ['true']
         return value_type(value)
@@ -61,6 +63,12 @@ TEMP_FOLDER_PATH = get_env('TEMP_FOLDER_PATH')
 # webhooks
 DEBUGGER_WEBHOOK = get_env('DEBUGGER_WEBHOOK')
 REPORT_WEBHOOKS = get_env('REPORT_WEBHOOKS', list)
+
+LAVA_API_KEY = get_env('LAVA_API_KEY')
+hryak.setters.set_lava_api_key(LAVA_API_KEY)
+
+LAVA_DONATE_OPTIONS = get_env('LAVA_DONATE_OPTIONS', dict)
+hryak.setters.set_lava_donate_options(LAVA_DONATE_OPTIONS)
 
 # redis - optional shared cache, so several bots see the same data
 REDIS_HOST = get_env('REDIS_HOST')
@@ -133,9 +141,4 @@ shops_emojis = {
     'premium_skins_shop': '💵',
     'coins_shop': '🪙',
     'donation_shop': '🍩',
-}
-
-payment_methods_for_languages = {
-    'ru': ['donatello'],
-    'en': []
 }

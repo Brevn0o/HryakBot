@@ -1196,31 +1196,24 @@ class Locales:
             'en': 'Price: {price}{currency}',
             'ru': 'Цена: {price}{currency}'}
         select_coins_placeholder = {
-            'en': '',
+            'en': 'Select amount',
             'ru': 'Выберите количество'}
         select_payment_method_title = {'en': 'Payment method',
                                        'ru': 'Способ оплаты'}
         select_payment_method_desc = {'en': '*Choose a payment method below*',
                                       'ru': '*Выберите способ оплаты ниже. Если вас не устраивают тарифы в каком либо способе оплаты, просто попробуйте другой способ*'}
         payment_methods_descs = {
-            'aaio': {'en': '- Instant delivery\n'
-                           '- A lot of payment methods\n',
-                     'ru': '- Моментальная выдача\n'
-                           '- Множество способов оплаты\n'
-                           '- Доступны русские и украинские карточки\n'},
-            'boosty': {'en': '- Issuance may take up to a day\n'
-                             '- Minimum amount 0.1 dollar\n',
-                       'ru': '- Выдача может занимать до суток\n'
-                             '- Минимальная сумма 10 рублей\n'},
-            'donatepay': {'en': '- Issuance may take up to a day\n'
-                                '- Minimum amount 0.1 dollar\n',
-                          'ru': '- Выдача может занимать до суток\n'
-                                '- Минимальная сумма 10 рублей\n'},
-            'donatello': {'en': '- Issuance may take up to a day\n'
+            'donatello': {'en': '- May take up to a day\n'
+                                '- Ukrainian cards\n'
                                 '- Cryptocurrency\n',
                           'ru': '- Выдача может занимать до суток\n'
                                 '- Доступны украинские карточки\n'
-                                '- Рекомендуется для украинцев\n'}
+                                '- Доступна криптовалюта\n'
+                                '- Рекомендуется для украинцев\n'},
+            'lava.top': {'en': '- Instant delivery\n'
+                               '- Russian / American cards\n',
+                         'ru': '- Моментальная выдача\n'
+                               '- Доступны русские и американские карточки\n'},
         }
         pay_below_title = {'en': 'Payment',
                            'ru': 'Оплата'}
@@ -1265,6 +1258,14 @@ class Locales:
                                     '- В поле "сообщение" введите номер заказа\n'
                                     ' > Номер заказа: {order_id}\n\n'
                                     '*Способ оплаты "Моно", принимает все карточки*'}
+        lava_pay_title = {'en': 'Lava.top',
+                               'ru': 'Lava.top'}
+        lava_pay_desc = {'en': '- Send {amount}{currency} via this link: [link]({url})\n'
+                                    ' > Order number: {order_id}',
+                              'ru': '- Отправьте {amount}{currency} по этой ссылке: [ссылка]({url})\n'
+                                    ' > Номер заказа: {order_id}\n\n'}
+        lava_pay_desc_minimum_requirement = {'en': '*The minimum amount for Lava.top is {amount} {currency}. Please choose another payment method*',
+                                            'ru': '*Минимальная сумма для Lava.top - {amount} {currency}*'}
         item_give_notification_title = {'en': 'Donation paid',
                                         'ru': 'Донат оплачен'}
         item_give_notification_desc = {'en': '*You received items for your donation:*\n\n'

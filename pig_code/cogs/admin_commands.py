@@ -13,6 +13,16 @@ class AdminCommands(commands.Cog):
     @discord.app_commands.command(description='Check if the bot is ready')
     @discord.app_commands.guilds(*[*config.ADMIN_GUILDS, *config.TEST_GUILDS])
     @commands.is_owner()
+    async def test(self, inter):
+        await DisUtils.pre_command_check(inter, owner_only=True)
+
+        order = hryak.functions.Lava.create_order(inter.user.id, 'hollars', 100, currency='RUB')
+        link = ''
+        await send_callback(inter, f'*Link: {order}*')
+
+    @discord.app_commands.command(description='Check if the bot is ready')
+    @discord.app_commands.guilds(*[*config.ADMIN_GUILDS, *config.TEST_GUILDS])
+    @commands.is_owner()
     async def is_ready(self, inter):
         await DisUtils.pre_command_check(inter, owner_only=True)
         if self.client.is_ready():
@@ -32,14 +42,6 @@ class AdminCommands(commands.Cog):
             except:
                 pass
         await send_callback(inter, f'*Tree is synced*')
-
-    @discord.app_commands.command(description='test')
-    @discord.app_commands.guilds(*[*config.ADMIN_GUILDS, *config.TEST_GUILDS])
-    @commands.is_owner()
-    async def test(self, inter, i: int):
-        await User.register(i)
-        # await DisUtils.pre_command_check(inter, owner_only=True)
-        await send_callback(inter, f'*{i} is registered*')
 
     @discord.app_commands.command(description='Block user from using the bot')
     @discord.app_commands.guilds(*[*config.ADMIN_GUILDS, *config.TEST_GUILDS])
@@ -92,15 +94,18 @@ class AdminCommands(commands.Cog):
         await Pig.add_weight(user.id, amount)
         await send_callback(inter, f'*User **{user}** received **{amount} kg***')
 
-    # @commands.slash_command(guild_ids=config.ADMIN_GUILDS,
-    #                         description='Set order status')
-    # async def set_order_status(self, inter, order_id: str = commands.Param(description='Order ID'),
-    #                            status=commands.Param(
-    #                                choices=['success', 'in_process', 'expired'])
-    #                            ):
-    #     await DisUtils.pre_command_check(inter)
-    #     await Order.set_status(order_id, status)
-    #     await send_callback(inter, f'*Order **{order_id}** status has been set to **{status}***')
+    @discord.app_commands.command(description='Set Order Status')
+    @discord.app_commands.choices(status=[
+        discord.app_commands.Choice(name='success', value='success'),
+        discord.app_commands.Choice(name='in_process', value='in_process'),
+        discord.app_commands.Choice(name='failed', value='failed')
+    ])
+    @discord.app_commands.guilds(*[*config.ADMIN_GUILDS])
+    async def set_order_status(self, inter, order_id: str,
+                               status: str):
+        await DisUtils.pre_command_check(inter)
+        await Order.set_status(order_id, status)
+        await send_callback(inter, f'*Order **{order_id}** status has been set to **{status}***')
 
     @discord.app_commands.command(description='Add all available skins to user')
     @discord.app_commands.guilds(*[*config.ADMIN_GUILDS, *config.TEST_GUILDS])
