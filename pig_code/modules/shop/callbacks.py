@@ -60,7 +60,7 @@ async def shop(inter, message=None, init_category: str = None, init_page: int = 
                                                 color=config.premium_color,
                                                 footer=Func.generate_footer(inter)),
                         'components': []}]}
-    if lang in ['en', 'ru']:
+    if lang in ['en', 'ru', 'uk']:
         embeds[translate(Locales.Shop.titles['donation_shop'], lang)] = {
             'embeds': [{'embed': generate_embed(translate(Locales.PremiumShop.main_page_title, lang),
                                                 translate(Locales.PremiumShop.main_page_desc, lang),
@@ -143,6 +143,8 @@ async def donation_page_selected(inter, category):
         currency = 'RUB'
     elif lang in ['en']:
         currency = 'USD'
+    elif lang in ['uk']:
+        currency = 'UAH'
     if category == 'hollars':
         m = await send_callback(inter,
                                 embed=generate_embed(translate(Locales.PremiumShop.buy_hollars_page_title, lang),
