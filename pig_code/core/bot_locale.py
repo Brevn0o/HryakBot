@@ -838,12 +838,33 @@ class Locales:
                            '> Баланс: **{coins}** {coins_emoji}',
                      'uk': '*Купується за гроші сервера, для спільного хряка*\n\n'
                            '> Баланс: **{coins}** {coins_emoji}'}
-        shop_weekly = {'en': 'This week',
-                       'ru': 'На этой неделе',
-                       'uk': 'Цього тижня'}
-        shop_weekly_desc = {'en': '*Changes every Sunday*',
-                            'ru': '*Меняется каждое воскресенье*',
-                            'uk': '*Змінюється щонеділі - що пішло, те пішло*'}
+        shop_entry = {'en': 'Entry level',
+                      'ru': 'Начальный уровень',
+                      'uk': 'Початковий рівень'}
+        shop_entry_desc = {'en': '*Small things, within reach of a young pig*\n\n'
+                                 '- Changes every Sunday',
+                           'ru': '*Мелочи, по карману даже молодому хряку*\n\n'
+                                 '- Меняется каждое воскресенье',
+                           'uk': '*Дрібниці, по кишені навіть молодому хряку*\n\n'
+                                 '- Змінюється щонеділі'}
+        shop_mid = {'en': 'Mid level',
+                    'ru': 'Средний уровень',
+                    'uk': 'Середній рівень'}
+        shop_mid_desc = {'en': '*Worth putting a few weeks of donations aside for*\n\n'
+                               '- Changes every Sunday',
+                         'ru': '*Стоит того, чтобы копить пару недель*\n\n'
+                               '- Меняется каждое воскресенье',
+                         'uk': '*Варте того, щоб збирати кілька тижнів*\n\n'
+                               '- Змінюється щонеділі'}
+        shop_high = {'en': 'High end',
+                     'ru': 'Высший уровень',
+                     'uk': 'Вищий рівень'}
+        shop_high_desc = {'en': '*What a whole server saves up for together*\n\n'
+                                '- Changes every Sunday',
+                          'ru': '*То, на что копит весь сервер вместе*\n\n'
+                                '- Меняется каждое воскресенье',
+                          'uk': '*Те, на що збирає весь сервер разом*\n\n'
+                                '- Змінюється щонеділі'}
         shop_permanent = {'en': 'Always available',
                           'ru': 'Всегда в наличии',
                           'uk': 'Завжди в наявності'}

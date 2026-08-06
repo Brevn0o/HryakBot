@@ -434,7 +434,10 @@ async def shop(inter, pre_command_check: bool = True, ephemeral: bool = False,
         edit_original_response = not ephemeral
     lang = await User.get_language(inter.user.id)
     data = await Shop.get_data(context='server') or {}
-    pages = {'weekly_shop': (Locales.GuildPig.shop_weekly, Locales.GuildPig.shop_weekly_desc),
+    # one page per price bracket, in the order a server would work through them
+    pages = {'weekly_entry_shop': (Locales.GuildPig.shop_entry, Locales.GuildPig.shop_entry_desc),
+             'weekly_mid_shop': (Locales.GuildPig.shop_mid, Locales.GuildPig.shop_mid_desc),
+             'weekly_high_shop': (Locales.GuildPig.shop_high, Locales.GuildPig.shop_high_desc),
              # 'permanent_shop': (Locales.GuildPig.shop_permanent, Locales.GuildPig.shop_permanent_desc)
              }
     # labels are what the user sees; the raw keys are what travels in custom_ids
