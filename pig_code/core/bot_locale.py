@@ -1888,6 +1888,12 @@ class Locales:
             'en': "This probably happened because the bot did not have enough permissions. Double-check whether the Hryak has all the necessary permissions",
             'ru': '*Вероятно это случилось потому-что у бота не достаточно прав. Перепроверьте есть ли у Хряка все нужные права*',
             'uk': '*Ймовірно, це сталося тому, що в бота недостатньо прав. Перевірте, чи є у Хряка всі потрібні права*'}
+        amount_too_small_title = {'en': 'Too little',
+                                  'ru': 'Слишком мало',
+                                  'uk': 'Замало'}
+        amount_too_small_desc = {'en': '*It has to be at least **{min_amount}***',
+                                 'ru': '*Нужно хотя бы **{min_amount}***',
+                                 'uk': '*Потрібно хоча б **{min_amount}***'}
         modal_input_is_not_number_title = {'en': 'Invalid input',
                                            'ru': 'Неверный ввод',
                                            'uk': 'Невірне введення'}

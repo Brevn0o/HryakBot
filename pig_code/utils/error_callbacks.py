@@ -196,6 +196,14 @@ async def modal_input_is_not_number(inter):
                                  ephemeral=True, edit_original_response=False)
 
 
+async def modal_amount_too_small(inter, min_amount: int = 1):
+    lang = await User.get_language(inter.user.id)
+    await default_error_callback(inter, translate(Locales.ErrorCallbacks.amount_too_small_title, lang),
+                                 translate(Locales.ErrorCallbacks.amount_too_small_desc, lang,
+                                           {'min_amount': min_amount}),
+                                 ephemeral=True, edit_original_response=False)
+
+
 async def bot_is_restarting(inter):
     lang = await User.get_language(inter.user.id)
     await default_error_callback(inter, translate(Locales.ErrorCallbacks.bot_is_restarting_title, lang),

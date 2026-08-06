@@ -42,12 +42,13 @@ async def cook(inter, item_id, update):
                                       thumbnail_url=await Item.get_image_path('grill', config.TEMP_FOLDER_PATH), edit_original_response=False,
                                       ephemeral=True)
         return
-    modal_interaction, amount = await modals.get_item_amount(inter,
+    result = await modals.get_item_amount(inter,
                                                              translate(Locales.InventoryItemCookModal.title, lang),
                                                              translate(Locales.InventoryItemCookModal.label, lang),
                                                              max_amount=await Item.get_amount(item_id, inter.user.id))
-    if amount is False:
+    if not result:
         return
+    modal_interaction, amount = result
     if await Item.get_amount(item_id, inter.user.id) <= 0:
         await error_callbacks.not_enough_items(inter, item_id, thumbnail_url=await Item.get_image_path(item_id, config.TEMP_FOLDER_PATH))
         return
@@ -65,13 +66,14 @@ async def cook(inter, item_id, update):
 
 async def sell(inter, item_id, update):
     lang = await User.get_language(inter.user.id)
-    modal_interaction, amount = await modals.get_item_amount(inter,
+    result = await modals.get_item_amount(inter,
                                                              translate(Locales.InventoryItemSellModal.title, lang),
                                                              translate(Locales.InventoryItemSellModal.label, lang),
                                                              max_amount=await Item.get_amount(item_id, inter.user.id))
     await User.clear_get_inventory_cache(inter.user.id)
-    if amount is False:
+    if not result:
         return
+    modal_interaction, amount = result
     if await Item.get_amount(item_id, inter.user.id) < amount:
         await error_callbacks.not_enough_items(modal_interaction, item_id,
                                                thumbnail_url=await Item.get_image_path(item_id, config.TEMP_FOLDER_PATH))

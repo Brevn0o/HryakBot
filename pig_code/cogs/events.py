@@ -96,7 +96,7 @@ class Events(commands.Cog):
                         user1 = await Trade.get_user(interaction.client, trade_id, 0)
                         user2 = await Trade.get_user(interaction.client, trade_id, 1)
                         if action_object in ['coins', 'hollars']:
-                            modal_interaction, amount = await modals.get_item_amount(interaction,
+                            result = await modals.get_item_amount(interaction,
                                                                                      translate(
                                                                                          Locales.Trade.add_item_modal_title,
                                                                                          lang),
@@ -115,8 +115,9 @@ class Events(commands.Cog):
                                                                                          action_object),
                                                                                      delete_response=True
                                                                                      )
-                            if amount is False:
+                            if not result:
                                 return
+                            modal_interaction, amount = result
                             await Trade.add_item(trade_id, modal_interaction.user.id, action_object, amount)
                             await modules.trade.callbacks.trade(modal_interaction,
                                                                 user1,
@@ -167,7 +168,7 @@ class Events(commands.Cog):
                                                                 pre_command_check=False)
                         elif custom_id_params[1] == 'add_item':
                             action_object = interaction_values[0].split(';')[0]
-                            modal_interaction, amount = await modals.get_item_amount(interaction,
+                            result = await modals.get_item_amount(interaction,
                                                                                      translate(
                                                                                          Locales.Trade.add_item_modal_title,
                                                                                          lang),
@@ -182,8 +183,9 @@ class Events(commands.Cog):
                                                                                          action_object),
                                                                                      delete_response=True
                                                                                      )
-                            if amount is False:
+                            if not result:
                                 return
+                            modal_interaction, amount = result
                             await interaction.delete_original_response()
                             await Trade.add_item(trade_id, modal_interaction.user.id, action_object, amount)
                             await Trade.set_agree(trade_id, user1_id, False)

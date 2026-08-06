@@ -5,7 +5,17 @@ from pig_code.utils import error_callbacks
 from pig_code.utils.functions import translate
 
 
-async def get_item_amount(inter, title, label, max_amount: int = None, delete_response: bool = False):
+async def get_item_amount(inter, title, label, max_amount: int = None, delete_response: bool = False,
+                          min_amount: int = 1):
+    """Asks for a number and hands back (interaction, amount).
+
+    Returns None when there is no usable answer - not a number, below min_amount, or the
+    modal was opened and never submitted. Callers should check the result before unpacking
+    it; anything less than min_amount is refused rather than quietly let through, because a
+    zero sails through every downstream check and ends up announced as "donated 0 coins".
+    An amount over what the person has is clamped instead, since that is a slip rather than
+    a mistake.
+    """
     lang = await User.get_language(user_id=inter.user.id)
     custom_id = f'modal;get_item_amount{random.randrange(1000)}'
     modal = discord.ui.Modal(title=title, custom_id=custom_id)
@@ -18,21 +28,27 @@ async def get_item_amount(inter, title, label, max_amount: int = None, delete_re
         required=True
     ))
     await inter.response.send_modal(modal)
-    interaction = await inter.client.wait_for(
-        "interaction",
-        check=lambda i: i.data.get('custom_id') == custom_id and i.user.id == inter.user.id,
-        timeout=300,
-    )
-    amount = interaction.data['components'][0]['components'][0]['value']
-    if not str(amount).isdigit():
+    try:
+        interaction = await inter.client.wait_for(
+            "interaction",
+            check=lambda i: i.data.get('custom_id') == custom_id and i.user.id == inter.user.id,
+            timeout=300,
+        )
+    except asyncio.TimeoutError:
+        return None
+    amount = interaction.data['components'][0]['components'][0]['value'].strip()
+    if not amount.isdigit():
         await error_callbacks.modal_input_is_not_number(interaction)
-        return False
-    if int(amount) > max_amount:
+        return None
+    amount = int(amount)
+    if amount < min_amount:
+        await error_callbacks.modal_amount_too_small(interaction, min_amount)
+        return None
+    if max_amount is not None and amount > max_amount:
         amount = max_amount
     if delete_response:
         await interaction.response.defer(ephemeral=True)
-        # await interaction.delete_original_response()
-    return interaction, int(amount)
+    return interaction, amount
 
 
 async def get_text(inter, title, label, placeholder: str = None, max_length: int = 32,
