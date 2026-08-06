@@ -46,7 +46,7 @@ async def duel(inter, opponent, bet):
             return right_message and opponent.id == interaction.user.id
 
     try:
-        interaction = await inter.client.wait_for('interaction', check=check, timeout=120)
+        interaction = await inter.client.wait_for('interaction', check=check, timeout=1800)
     except asyncio.exceptions.TimeoutError:
         await error_callbacks.default_error_callback(inter, translate(Locales.Duel.duel_canceled_title, lang),
                                                      translate(Locales.Duel.no_response_desc, lang,
