@@ -34,7 +34,7 @@ class PigBot:
                                                max_messages=1000, chunk_guilds_at_startup=False,
                                                activity=discord.Activity(
                                                    type=discord.ActivityType.watching,
-                                                   name=f'/help'))
+                                                   name=f'/setup'))
         else:
             self.bot = commands.Bot(command_prefix='NO_PREFIX', intents=intents, strict_localization=True, chunk_guilds_at_startup=False)
 
