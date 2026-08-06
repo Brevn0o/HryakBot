@@ -126,6 +126,13 @@ class AdminCommands(commands.Cog):
         await Shop.update()
         await send_callback(inter, f'*Shop updated*')
 
+    @discord.app_commands.command(description='Update guild shop')
+    @discord.app_commands.guilds(*[*config.ADMIN_GUILDS, *config.TEST_GUILDS, *config.PUBLIC_TEST_GUILDS])
+    async def update_guild_shop(self, inter):
+        await DisUtils.pre_command_check(inter, owner_only=True)
+        await Shop.update_server()
+        await send_callback(inter, f'*Guild shop updated*')
+
     @discord.app_commands.command(description='Transfer User Data')
     @discord.app_commands.guilds(*[*config.ADMIN_GUILDS, *config.TEST_GUILDS])
     async def transfer_account(self, inter, from_user: discord.User, to_user: discord.User, overwrite: bool):
