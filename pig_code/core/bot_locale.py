@@ -206,27 +206,36 @@ class Locales:
         'settings-top-participate-desc': {'en': 'Just choose yes or no',
                                                   'ru': 'Просто выбери да или нет',
                                                   'uk': 'Просто обери так чи ні'},
-        'server-top-desc': {'en': 'See the top servers by the weight of their pig',
-                            'ru': 'Посмотреть топ серверов по весу их хряка',
-                            'uk': 'Переглянути топ серверів за вагою їхнього хряка'},
-        'server-language-desc': {'en': "Change the language the server's own messages use",
-                                 'ru': 'Изменить язык, на котором бот говорит на сервере',
-                                 'uk': 'Змінити мову, якою бот говорить на сервері'},
-        'server-language-language-name': {'en': 'language',
-                                          'ru': 'язык',
-                                          'uk': 'мова'},
-        'server-language-language-desc': {'en': 'The language the server pig will speak',
-                                          'ru': 'Язык, на котором будет говорить серверный хряк',
-                                          'uk': 'Мова, якою говоритиме серверний хряк'},
-        'server-pig-setup-desc': {'en': 'Choose a channel for the server pig to live in',
-                                  'ru': 'Выбрать канал, в котором будет жить серверный хряк',
-                                  'uk': 'Обрати канал, у якому житиме серверний хряк'},
-        'server-pig-setup-channel-name': {'en': 'channel',
+        'server-top-desc': {'en': 'See the top servers by the weight of their community pig',
+                            'ru': 'Посмотреть топ серверов по весу общего хряка',
+                            'uk': 'Переглянути топ серверів за вагою спільного хряка'},
+        'setup-desc': {'en': 'Choose a channel for the community pig to live in',
+                                  'ru': 'Выбрать канал, в котором будет жить общий хряк',
+                                  'uk': 'Обрати канал, у якому житиме спільний хряк'},
+        'setup-channel-name': {'en': 'channel',
                                           'ru': 'канал',
                                           'uk': 'канал'},
-        'server-pig-setup-channel-desc': {'en': 'The channel the server pig will live in',
-                                          'ru': 'Канал, в котором будет жить серверный хряк',
-                                          'uk': 'Канал, у якому житиме серверний хряк'},
+        'setup-channel-desc': {'en': 'The channel the community pig will live in',
+                                          'ru': 'Канал, в котором будет жить общий хряк',
+                                          'uk': 'Канал, у якому житиме спільний хряк'},
+        'setup-polls-name': {'en': 'polls',
+                                               'ru': 'голосования',
+                                               'uk': 'голосування'},
+        'setup-polls-desc': {'en': 'The channel the server votes in',
+                                               'ru': 'Канал, в котором сервер голосует',
+                                               'uk': 'Канал, у якому сервер голосує'},
+        'setup-notifications-name': {'en': 'notifications',
+                                                'ru': 'уведомления',
+                                                'uk': 'сповіщення'},
+        'setup-admin-name': {'en': 'panel',
+                             'ru': 'панель',
+                             'uk': 'панель'},
+        'setup-admin-desc': {'en': 'The staff-only channel for the admin panel',
+                             'ru': 'Канал для панели, видимый только администрации',
+                             'uk': 'Канал для панелі, видимий лише адміністрації'},
+        'setup-notifications-desc': {'en': 'The channel hryak announces things in',
+                                                'ru': 'Канал, в котором хряк всё объявляет',
+                                                'uk': 'Канал, у якому хряк усе оголошує'},
     }
 
     user_install_content = {
@@ -593,14 +602,23 @@ class Locales:
                     'uk': '*Налаштування участі для команди `/top` змінено та виставлено на `{value}`*'}
 
     class GuildPigSetup:
-        scd_title = {'en': 'The server pig has moved in',
-                     'ru': 'Серверный хряк заселился',
-                     'uk': 'Серверний хряк заселився'}
+        scd_title = {'en': 'The community pig has moved in',
+                     'ru': 'Общий Хряк заселился',
+                     'uk': 'Спільний Хряк заселився'}
         scd_desc = {'en': '*From now on **{pig}** lives in {channel}*\n\n'
+                          '- The server votes in {poll_channel}\n'
+                          '- Everything that happens is announced in {notification_channel}\n'
+                          '- {admin_channel} is the panel, and only staff can see it\n'
                           '- Sending messages there has been turned off for everyone, so the pig has room to breathe',
                     'ru': '*Отныне **{pig}** живёт в {channel}*\n\n'
+                          '- Сервер голосует в {poll_channel}\n'
+                          '- Обо всём происходящем хряк объявляет в {notification_channel}\n'
+                          '- {admin_channel} - это панель, и видит её только администрация\n'
                           '- Отправка сообщений там отключена для всех, чтобы хряку было где развернуться',
                     'uk': '*Відтепер **{pig}** живе в {channel}*\n\n'
+                          '- Сервер голосує в {poll_channel}\n'
+                          '- Про все, що відбувається, хряк оголошує в {notification_channel}\n'
+                          '- {admin_channel} - це панель, і бачить її лише адміністрація\n'
                           '- Надсилання повідомлень там вимкнено для всіх, щоб хряку було де розвернутися'}
         no_permissions_title = {'en': 'Not enough rights',
                                 'ru': 'Не хватает прав',
@@ -614,6 +632,142 @@ class Locales:
                                   '- Либо укажите канал сами, и я поселю хряка в нём',
                             'uk': '*Мені потрібне право **Керувати каналами**, щоб створити канал для хряка*\n\n'
                                   '- Або вкажіть канал самі, і я поселю хряка в ньому'}
+
+    class GuildPigAdmin:
+        message_title = {'en': 'Admin panel',
+                         'ru': 'Панель администратора',
+                         'uk': 'Панель адміністратора'}
+        message_desc = {'en': '*Only people who can manage this server see this channel*\n\n'
+                              '> The server has: **{coins}** {coins_emoji}',
+                        'ru': '*Этот канал видят только те, кто может управлять сервером*\n\n'
+                              '> У сервера есть: **{coins}** {coins_emoji}',
+                        'uk': '*Цей канал бачать лише ті, хто може керувати сервером*\n\n'
+                              '> У сервера є: **{coins}** {coins_emoji}'}
+        actions_placeholder = {'en': 'Choose an action',
+                               'ru': 'Выберите действие',
+                               'uk': 'Оберіть дію'}
+        withdraw_btn = {'en': 'Withdraw money',
+                        'ru': 'Вывести деньги',
+                        'uk': 'Вивести гроші'}
+        withdraw_btn_desc = {'en': "From the server into your own account",
+                             'ru': 'От сервера на ваш собственный счёт',
+                             'uk': 'Від сервера на ваш власний рахунок'}
+        # a TextInput label maxes out at 45 characters
+        withdraw_modal_title = {'en': 'Withdraw from the server',
+                                'ru': 'Вывести у сервера',
+                                'uk': 'Вивести у сервера'}
+        withdraw_modal_label = {'en': 'How much to take',
+                                'ru': 'Сколько вывести',
+                                'uk': 'Скільки вивести'}
+        withdraw_confirm_desc = {'en': '*Are you sure you want to take **{money}** {currency_emoji} '
+                                       'out of the balance of **{guild}**?*\n\n'
+                                       '- It goes to your own account\n'
+                                       '- This money was donated by the users of the server',
+                                 'ru': '*Вы точно хотите забрать **{money}** {currency_emoji} '
+                                       'с баланса сервера **{guild}**?*\n\n'
+                                       '- Они уйдут на ваш собственный счёт\n'
+                                       '- Эти деньги жертвовали пользователи сервера',
+                                 'uk': '*Ви точно хочете забрати **{money}** {currency_emoji} '
+                                       'з балансу сервера **{guild}**?*\n\n'
+                                       '- Вони підуть на ваш власний рахунок\n'
+                                       '- Ці гроші жертвував увесь сервер'}
+        withdraw_scd_title = {'en': 'Withdrawn',
+                              'ru': 'Выведено',
+                              'uk': 'Виведено'}
+        withdraw_scd_desc = {'en': '***{money}** {currency_emoji} went to your account*\n\n'
+                                   '> The server has **{left}** {currency_emoji} left',
+                             'ru': '***{money}** {currency_emoji} ушли на ваш счёт*\n\n'
+                                   '> У сервера осталось **{left}** {currency_emoji}',
+                             'uk': '***{money}** {currency_emoji} пішли на ваш рахунок*\n\n'
+                                   '> У сервера залишилося **{left}** {currency_emoji}'}
+        withdraw_cancelled_title = {'en': 'Nothing withdrawn',
+                                    'ru': 'Ничего не выведено',
+                                    'uk': 'Нічого не виведено'}
+        withdraw_cancelled_desc = {'en': '*The money stayed with the server*',
+                                   'ru': '*Деньги остались у сервера*',
+                                   'uk': '*Гроші залишилися у сервера*'}
+        withdraw_gone_desc = {'en': '*The server only has **{available}** {currency_emoji} now - '
+                                    'somebody spent it while you were deciding*',
+                              'ru': '*У сервера сейчас только **{available}** {currency_emoji} - '
+                                    'пока вы решали, их потратили*',
+                              'uk': '*У сервера зараз лише **{available}** {currency_emoji} - '
+                                    'поки ви вирішували, їх витратили*'}
+        empty_title = {'en': 'Nothing to take',
+                       'ru': 'Забирать нечего',
+                       'uk': 'Забирати нічого'}
+        empty_desc = {'en': '*The server has no money at all*',
+                      'ru': '*У сервера совсем нет денег*',
+                      'uk': '*У сервера зовсім немає грошей*'}
+        notify_withdraw_title = {'en': 'Money left the server',
+                                 'ru': 'Деньги ушли с сервера',
+                                 'uk': 'Гроші пішли з сервера'}
+        notify_withdraw_desc = {'en': '***{user}** withdrew **{money}** {currency_emoji}*\n\n'
+                                      '> The server has **{left}** {currency_emoji} left',
+                                'ru': '***{user}** вывел **{money}** {currency_emoji}*\n\n'
+                                      '> У сервера осталось **{left}** {currency_emoji}',
+                                'uk': '***{user}** вивів **{money}** {currency_emoji}*\n\n'
+                                      '> У сервера залишилося **{left}** {currency_emoji}'}
+        notify_donate_title = {'en': 'Money donated',
+                               'ru': 'Деньги пожертвованы',
+                               'uk': 'Гроші надійшли'}
+        notify_donate_desc = {'en': '***{user}** donated **{money}** {currency_emoji}*\n\n'
+                                    '> The server now has **{left}** {currency_emoji}',
+                              'ru': '***{user}** пожертвовал **{money}** {currency_emoji}*\n\n'
+                                    '> Теперь у сервера **{left}** {currency_emoji}',
+                              'uk': '***{user}** віддав **{money}** {currency_emoji}*\n\n'
+                                    '> Тепер у сервера **{left}** {currency_emoji}'}
+        language_btn = {'en': 'Language',
+                        'ru': 'Язык',
+                        'uk': 'Мова'}
+        language_btn_desc = {'en': 'What hryak speaks on this server',
+                             'ru': 'На каком языке хряк говорит на сервере',
+                             'uk': 'Якою мовою хряк говорить на сервері'}
+        language_title = {'en': 'Server language',
+                          'ru': 'Язык сервера',
+                          'uk': 'Мова сервера'}
+        language_desc = {'en': '*Pick what hryak speaks here - its own messages change with it*',
+                         'ru': '*Выберите, на каком языке говорит хряк - его сообщения сменят язык вместе с ним*',
+                         'uk': '*Оберіть, якою мовою говорить хряк - його повідомлення змінять мову разом з ним*'}
+        language_placeholder = {'en': 'Choose a language',
+                                'ru': 'Выберите язык',
+                                'uk': 'Оберіть мову'}
+        rename_btn = {'en': 'Rename the pig',
+                      'ru': 'Переименовать хряка',
+                      'uk': 'Перейменувати хряка'}
+        rename_btn_desc = {'en': 'Give it a name of your own',
+                           'ru': 'Дать ему собственное имя',
+                           'uk': 'Дати йому власне імʼя'}
+        # a modal title and a TextInput label both stop at 45 characters
+        rename_modal_title = {'en': 'Rename the pig',
+                              'ru': 'Переименовать хряка',
+                              'uk': 'Перейменувати хряка'}
+        rename_modal_label = {'en': 'New name',
+                              'ru': 'Новое имя',
+                              'uk': 'Нове імʼя'}
+        rename_scd_title = {'en': 'Renamed',
+                            'ru': 'Переименован',
+                            'uk': 'Перейменовано'}
+        rename_scd_desc = {'en': '*The pig is called **{pig}** now*',
+                           'ru': '*Теперь хряка зовут **{pig}***',
+                           'uk': '*Тепер хряка звати **{pig}***'}
+        rename_bad_title = {'en': 'Not a name',
+                            'ru': 'Это не имя',
+                            'uk': 'Це не імʼя'}
+        rename_bad_desc = {'en': '*A name needs at least one ordinary character*',
+                           'ru': '*В имени нужен хотя бы один обычный символ*',
+                           'uk': '*В імені потрібен хоча б один звичайний символ*'}
+        notify_rename_title = {'en': 'The pig has a new name',
+                               'ru': 'У хряка новое имя',
+                               'uk': 'У хряка нове імʼя'}
+        notify_rename_desc = {'en': '***{user}** renamed the pig to **{pig}***',
+                              'ru': '***{user}** переименовал хряка в **{pig}***',
+                              'uk': '***{user}** перейменував хряка на **{pig}***'}
+        no_rights_title = {'en': 'Not for you',
+                           'ru': 'Не для вас',
+                           'uk': 'Не для вас'}
+        no_rights_desc = {'en': '*Only people who can **Manage Server** can use this panel*',
+                          'ru': '*Панелью могут пользоваться только те, кто может **Управлять сервером***',
+                          'uk': '*Панеллю можуть користуватися лише ті, хто може **Керувати сервером***'}
 
     class SetServerLanguage:
         scd_title = {
@@ -632,23 +786,310 @@ class Locales:
                          'ru': '{pig}',
                          'uk': '{pig}'}
         message_desc = {'en': '> Weight: **{weight}** {kg}\n'
-                              '> Last fed: {last_feed}',
+                              '> Last fed: {last_feed}\n\n'
+                              '> Server balance: **{coins}** {coins_emoji}',
                         'ru': '> Вес: **{weight}** {kg}\n'
-                              '> Последняя кормёжка: {last_feed}',
+                              '> Последняя кормёжка: {last_feed}\n\n'
+                              '> Баланс сервера: **{coins}** {coins_emoji}',
                         'uk': '> Вага: **{weight}** {kg}\n'
-                              '> Останнє годування: {last_feed}'}
+                              '> Останнє годування: {last_feed}\n\n'
+                              '> Баланс сервера: **{coins}** {coins_emoji}'}
         never_fed = {'en': '*nobody yet*',
                      'ru': '*ещё никто*',
                      'uk': '*ще ніхто*'}
+        # same format options as SendMoney, so the one flow can just swap which it reads
+        donate_confirm_desc = {'en': '*Are you sure you want to donate **{money}** {currency_emoji} '
+                                     'to the community pig of **{user}**?*\n\n'
+                                     '- Tax is **{tax}** %\n'
+                                     '- **{money_with_tax}** {currency_emoji} will be charged from your account',
+                               'ru': '*Вы точно хотите пожертвовать **{money}** {currency_emoji} '
+                                     'общему хряку **{user}**?*\n\n'
+                                     '- Налог составляет **{tax}** %\n'
+                                     '- С вашего счёта снимут **{money_with_tax}** {currency_emoji}',
+                               'uk': '*Ви точно хочете віддати **{money}** {currency_emoji} '
+                                     'спільному хряку **{user}**?*\n\n'
+                                     '- Податок становить **{tax}** %\n'
+                                     '- З вашого рахунку знімуть **{money_with_tax}** {currency_emoji}'}
+        donate_modal_title = {'en': 'Feed the piggy bank',
+                              'ru': 'Пополнить копилку',
+                              'uk': 'Поповнити скарбничку'}
+        # a TextInput label maxes out at 45 characters
+        donate_modal_label = {'en': 'How much (tax {tax}%)',
+                              'ru': 'Сколько отдать (налог {tax}%)',
+                              'uk': 'Скільки віддати (податок {tax}%)'}
+        donate_btn = {'en': 'Donate',
+                      'ru': 'Пожертвовать',
+                      'uk': 'Пожертвувати'}
+        donate_scd_title = {'en': 'Thank you',
+                            'ru': 'Спасибо',
+                            'uk': 'Хряк вдячний'}
+        donate_scd_desc = {'en': '***{money}** {currency_emoji} went to the server\'s balance **{user}***',
+                           'ru': '***{money}** {currency_emoji} ушли на баланс сервера **{user}***',
+                           'uk': '***{money}** {currency_emoji} пішли спільному хряку **{user}***'}
+        shop_btn = {'en': 'Shop',
+                    'ru': 'Магазин',
+                    'uk': 'Магазин'}
+        shop_title = {'en': 'Community shop',
+                      'ru': 'Общий магазин',
+                      'uk': 'Серверний магазин'}
+        shop_desc = {'en': '*Bought with the money the server has, for the community pig*\n\n'
+                           '> Balance: **{coins}** {coins_emoji}',
+                     'ru': '*Покупается на деньги сервера, для общего хряка*\n\n'
+                           '> Баланс: **{coins}** {coins_emoji}',
+                     'uk': '*Купується за гроші сервера, для спільного хряка*\n\n'
+                           '> Баланс: **{coins}** {coins_emoji}'}
+        shop_weekly = {'en': 'This week',
+                       'ru': 'На этой неделе',
+                       'uk': 'Цього тижня'}
+        shop_weekly_desc = {'en': '*Changes every Sunday*',
+                            'ru': '*Меняется каждое воскресенье*',
+                            'uk': '*Змінюється щонеділі - що пішло, те пішло*'}
+        shop_permanent = {'en': 'Always available',
+                          'ru': 'Всегда в наличии',
+                          'uk': 'Завжди в наявності'}
+        shop_permanent_desc = {'en': '*Never rotates out, so there is time to save up*',
+                               'ru': '*Никогда не пропадает, так что есть время накопить*',
+                               'uk': '*Ніколи не зникає, тож є час накопичити*'}
+        buy_confirm_desc = {'en': '*Buying **{item}** for **{price}** {currency_emoji} is not yours alone to decide*\n\n'
+                                  '- A poll will be opened for the whole server\n'
+                                  '- It stays open for **{hours}** hours, and the pig only gets the item if the vote passes\n'
+                                  '- The money leaves the server balance when it does',
+                            'ru': '*Покупка **{item}** за **{price}** {currency_emoji} решается не вами одним*\n\n'
+                                  '- Для всего сервера будет открыто голосование\n'
+                                  '- Оно продлится **{hours}** часов, и хряк получит предмет только если оно пройдёт\n'
+                                  '- Деньги спишутся с баланса сервера именно тогда',
+                            'uk': '*Купівля **{item}** за **{price}** {currency_emoji} вирішується не вами одним*\n\n'
+                                  '- Для всього сервера буде відкрито голосування\n'
+                                  '- Воно триватиме **{hours}** годин, і хряк отримає предмет лише якщо воно пройде\n'
+                                  '- Гроші спишуться з балансу сервера саме тоді'}
+        poll_question = {'en': 'Buy {item} for the pig? ({price} {currency})',
+                         'ru': 'Купить {item} для хряка? ({price} {currency})',
+                         'uk': 'Купити {item} для хряка? ({price} {currency})'}
+        poll_yes = {'en': 'Yes', 'ru': 'Да', 'uk': 'Так'}
+        poll_no = {'en': 'No', 'ru': 'Нет', 'uk': 'Ні'}
+        poll_started_title = {'en': 'The server is voting',
+                              'ru': 'Сервер голосует',
+                              'uk': 'Сервер голосує'}
+        poll_started_desc = {'en': '*The vote for **{item}** is open in {channel}*\n\n'
+                                   '- It closes **<t:{expires}:R>**',
+                             'ru': '*Голосование за **{item}** идёт в {channel}*\n\n'
+                                   '- Оно закроется **<t:{expires}:R>**',
+                             'uk': '*Голосування за **{item}** триває в {channel}*\n\n'
+                                   '- Воно закриється **<t:{expires}:R>**'}
+        poll_passed_title = {'en': 'The server said yes',
+                             'ru': 'Сервер сказал да',
+                             'uk': 'Сервер сказав так'}
+        poll_passed_desc = {'en': '***{item}** is now the pig\'s, for **{price}** {currency_emoji}*\n\n'
+                                  '> {yes} for · {no} against',
+                            'ru': '***{item}** теперь принадлежит хряку, за **{price}** {currency_emoji}*\n\n'
+                                  '> {yes} за · {no} против',
+                            'uk': '***{item}** тепер належить хряку, за **{price}** {currency_emoji}*\n\n'
+                                  '> {yes} за · {no} проти'}
+        poll_rejected_title = {'en': 'The server said no',
+                               'ru': 'Сервер сказал нет',
+                               'uk': 'Сервер сказав ні'}
+        poll_rejected_desc = {'en': '***{item}** was not bought*\n\n> {yes} for · {no} against',
+                              'ru': '***{item}** не куплен*\n\n> {yes} за · {no} против',
+                              'uk': '***{item}** не куплено*\n\n> {yes} за · {no} проти'}
+        poll_no_quorum_title = {'en': 'Not enough votes',
+                                'ru': 'Не хватило голосов',
+                                'uk': 'Не вистачило голосів'}
+        poll_no_quorum_desc = {'en': '*Only {votes} of the {needed} needed voted, so **{item}** was not bought*',
+                               'ru': '*Проголосовало лишь {votes} из нужных {needed}, поэтому **{item}** не куплен*',
+                               'uk': '*Проголосувало лише {votes} з потрібних {needed}, тому **{item}** не куплено*'}
+        poll_no_money_title = {'en': 'Not enough money',
+                               'ru': 'Не хватило денег',
+                               'uk': 'Не вистачило грошей'}
+        poll_no_money_desc = {'en': '*The vote passed, but the server could not afford **{item}** by the time it closed*',
+                              'ru': '*Голосование прошло, но к его концу серверу не хватило денег на **{item}***',
+                              'uk': '*Голосування пройшло, але на його кінець серверу не вистачило грошей на **{item}***'}
+        buy_bypassed_title = {'en': 'Bought',
+                              'ru': 'Куплено',
+                              'uk': 'Куплено'}
+        buy_bypassed_desc = {'en': '***{item}** went straight to the pig for **{price}** {currency_emoji}*',
+                             'ru': '***{item}** сразу отправился хряку за **{price}** {currency_emoji}*',
+                             'uk': '***{item}** одразу вирушив хряку за **{price}** {currency_emoji}*'}
+        pooped_title = {'en': '{pig} pooped',
+                        'ru': '{pig} покакал',
+                        'uk': '{pig} покакав'}
+        pooped_desc = {'en': 'Pooped: **{total}** {emoji}\n'
+                             'Weight gained: **{total_kg}** {kg}, fed by: **{feeders}**\n'
+                             'Size bonus: **x{weight_bonus}**',
+                       'ru': 'Накакано: **{total}** {emoji}\n'
+                             'Набрано веса: **{total_kg}** {kg}, кормили: **{feeders}**\n'
+                             'Бонус за размер: **x{weight_bonus}**',
+                       'uk': 'Накакано: **{total}** {emoji}\n'
+                             'Набрано ваги: **{total_kg}** {kg}, годували: **{feeders}**\n'
+                             'Бонус за розмір: **x{weight_bonus}**'}
+        pooped_more = {'en': '*…and **{count}** more, all paid*',
+                       'ru': '*…и ещё **{count}**, всем заплатили*',
+                       'uk': '*…і ще **{count}**, усім заплатили*'}
+        pooped_who = {'en': '💩 ⟩ Manure split',
+                      'ru': '💩 ⟩ Распределение навоза',
+                      'uk': '💩 ⟩ Розподіл гною'}
+        notify_bought_title = {'en': 'The pig got something new',
+                               'ru': 'У хряка обновка',
+                               'uk': 'У хряка обновка'}
+        notify_bought_desc = {'en': '***{user}** bought **{item}** for **{price}** {currency_emoji}*',
+                              'ru': '***{user}** купил **{item}** за **{price}** {currency_emoji}*',
+                              'uk': '***{user}** купив **{item}** за **{price}** {currency_emoji}*'}
+        notify_dressed_title = {'en': 'The pig was dressed',
+                                'ru': 'Хряка переодели',
+                                'uk': 'Хряка перевдягли'}
+        notify_worn_desc = {'en': '***{user}** put **{item}** on the pig*',
+                            'ru': '***{user}** надел на хряка **{item}***',
+                            'uk': '***{user}** вдягнув на хряка **{item}***'}
+        notify_removed_desc = {'en': '***{user}** took **{item}** off the pig*',
+                               'ru': '***{user}** снял с хряка **{item}***',
+                               'uk': '***{user}** зняв з хряка **{item}***'}
+        poll_in_process_title = {'en': 'One vote at a time',
+                                 'ru': 'По одному голосованию',
+                                 'uk': 'По одному голосуванню'}
+        poll_in_process_desc = {'en': '*The server is already voting on a purchase - wait for that one to finish*',
+                                'ru': '*Сервер уже голосует за покупку - дождитесь её окончания*',
+                                'uk': '*Сервер вже голосує за покупку - дочекайтеся її завершення*'}
+        not_contributor_title = {'en': 'Feed the pig first',
+                                 'ru': 'Сначала покормите хряка',
+                                 'uk': 'Спочатку погодуйте хряка'}
+        not_contributor_desc = {'en': '*Only people who fed this pig in the last week can start a vote*',
+                                'ru': '*Начать голосование могут только те, кто кормил этого хряка на этой неделе*',
+                                'uk': '*Розпочати голосування можуть лише ті, хто годував цього хряка цього тижня*'}
+        proposal_cooldown_title = {'en': 'Not so fast',
+                                   'ru': 'Не так быстро',
+                                   'uk': 'Не так швидко'}
+        proposal_cooldown_desc = {'en': '*You can start one vote every 48 hours*\n\n- Try again **<t:{try_again}:R>**',
+                                  'ru': '*Начинать голосование можно раз в 48 часов*\n\n- Попробуйте снова **<t:{try_again}:R>**',
+                                  'uk': '*Розпочинати голосування можна раз на 48 годин*\n\n- Спробуйте знову **<t:{try_again}:R>**'}
+        buy_cancelled_title = {'en': 'No poll started',
+                               'ru': 'Голосование не начато',
+                               'uk': 'Голосування не розпочато'}
+        buy_cancelled_desc = {'en': '*You decided against putting it to the server*',
+                              'ru': '*Вы передумали выносить это на сервер*',
+                              'uk': '*Ви передумали виносити це на сервер*'}
+        inventory_btn = {'en': 'Inventory',
+                         'ru': 'Инвентарь',
+                         'uk': 'Інвентар'}
+        inventory_wardrobe = {'en': 'Wardrobe',
+                              'ru': 'Гардероб',
+                              'uk': 'Гардероб'}
+        inventory_wardrobe_desc = {'en': '*Everything the pig can be dressed in - what it wears is up to the server*',
+                                   'ru': '*Всё, во что можно одеть хряка - что он носит, решает сервер*',
+                                   'uk': '*Усе, у що можна вдягнути хряка - що він носить, вирішує сервер*'}
+        inventory_things = {'en': 'Things',
+                            'ru': 'Вещи',
+                            'uk': 'Речі'}
+        inventory_things_desc = {'en': '*Everything else the server bought for the pig*',
+                                 'ru': '*Всё остальное, что сервер купил хряку*',
+                                 'uk': '*Усе інше, що сервер купив хряку*'}
+        inventory_empty = {'en': '*The pig owns nothing here yet*',
+                           'ru': '*У хряка тут пока ничего нет*',
+                           'uk': '*У хряка тут поки нічого немає*'}
+        wear_confirm_desc = {'en': '*Putting **{item}** on the pig is not yours alone to decide*\n\n'
+                                   '- A poll will be opened for the whole server\n'
+                                   '- It stays open for **{hours}** hours, and the pig only puts it on if the vote passes',
+                             'ru': '*Надеть на хряка **{item}** решаете не вы одни*\n\n'
+                                   '- Для всего сервера будет открыто голосование\n'
+                                   '- Оно продлится **{hours}** часов, и хряк наденет это только если оно пройдёт',
+                             'uk': '*Вдягнути на хряка **{item}** вирішуєте не ви одні*\n\n'
+                                   '- Для всього сервера буде відкрито голосування\n'
+                                   '- Воно триватиме **{hours}** годин, і хряк вдягне це лише якщо воно пройде'}
+        remove_confirm_desc = {'en': '*Taking **{item}** off the pig is not yours alone to decide*\n\n'
+                                     '- A poll will be opened for the whole server\n'
+                                     '- It stays open for **{hours}** hours, and the pig only takes it off if the vote passes',
+                               'ru': '*Снять с хряка **{item}** решаете не вы одни*\n\n'
+                                     '- Для всего сервера будет открыто голосование\n'
+                                     '- Оно продлится **{hours}** часов, и хряк снимет это только если оно пройдёт',
+                               'uk': '*Зняти з хряка **{item}** вирішуєте не ви одні*\n\n'
+                                     '- Для всього сервера буде відкрито голосування\n'
+                                     '- Воно триватиме **{hours}** годин, і хряк зніме це лише якщо воно пройде'}
+        wear_question = {'en': 'Put {item} on the pig?',
+                         'ru': 'Надеть {item} на хряка?',
+                         'uk': 'Вдягнути {item} на хряка?'}
+        remove_question = {'en': 'Take {item} off the pig?',
+                           'ru': 'Снять {item} с хряка?',
+                           'uk': 'Зняти {item} з хряка?'}
+        wear_passed_title = {'en': 'The server dressed the pig',
+                             'ru': 'Сервер одел хряка',
+                             'uk': 'Сервер вдягнув хряка'}
+        wear_passed_desc = {'en': '*The pig is wearing **{item}** now*\n\n> {yes} for · {no} against',
+                            'ru': '*Теперь хряк носит **{item}***\n\n> {yes} за · {no} против',
+                            'uk': '*Тепер хряк носить **{item}***\n\n> {yes} за · {no} проти'}
+        remove_passed_desc = {'en': '*The pig took **{item}** off*\n\n> {yes} for · {no} against',
+                              'ru': '*Хряк снял **{item}***\n\n> {yes} за · {no} против',
+                              'uk': '*Хряк зняв **{item}***\n\n> {yes} за · {no} проти'}
+        wear_rejected_desc = {'en': '*The pig stays as it is*\n\n> {yes} for · {no} against',
+                              'ru': '*Хряк остаётся как есть*\n\n> {yes} за · {no} против',
+                              'uk': '*Хряк залишається як є*\n\n> {yes} за · {no} проти'}
+        wear_no_quorum_desc = {'en': '*Only {votes} of the {needed} needed voted, so the pig stays as it is*',
+                               'ru': '*Проголосовало лишь {votes} из нужных {needed}, поэтому хряк остаётся как есть*',
+                               'uk': '*Проголосувало лише {votes} з потрібних {needed}, тому хряк залишається як є*'}
+        wear_gone_title = {'en': 'Nothing to put on',
+                           'ru': 'Нечего надевать',
+                           'uk': 'Нема чого вдягати'}
+        wear_gone_desc = {'en': '*The vote passed, but the pig no longer has **{item}** by the time it closed*',
+                          'ru': '*Голосование прошло, но к его концу у хряка уже не было **{item}***',
+                          'uk': '*Голосування пройшло, але на його кінець у хряка вже не було **{item}***'}
+        wear_bypassed_title = {'en': 'Done',
+                               'ru': 'Готово',
+                               'uk': 'Готово'}
+        wear_bypassed_desc = {'en': '*The pig is wearing **{item}** now*',
+                              'ru': '*Теперь хряк носит **{item}***',
+                              'uk': '*Тепер хряк носить **{item}***'}
+        remove_bypassed_desc = {'en': '*The pig took **{item}** off*',
+                                'ru': '*Хряк снял **{item}***',
+                                'uk': '*Хряк зняв **{item}***'}
+        wear_poll_in_process_title = {'en': 'One vote at a time',
+                                      'ru': 'По одному голосованию',
+                                      'uk': 'По одному голосуванню'}
+        wear_poll_in_process_desc = {'en': '*The server is already voting on what the pig wears - '
+                                           'wait for that one to finish*',
+                                     'ru': '*Сервер уже голосует за то, что носит хряк - '
+                                           'дождитесь окончания голосования*',
+                                     'uk': '*Сервер вже голосує за те, що носить хряк - '
+                                           'дочекайтеся завершення голосування*'}
+        wear_not_compatible_title = {'en': 'Does not go together',
+                                     'ru': 'Не сочетается',
+                                     'uk': 'Не поєднується'}
+        wear_not_compatible_desc = {'en': '***{item}** cannot be worn with what the pig has on*\n\n'
+                                          '- Get the server to take off {skins} first',
+                                    'ru': '***{item}** нельзя носить с тем, что уже надето на хряке*\n\n'
+                                          '- Сначала пусть сервер снимет {skins}',
+                                    'uk': '***{item}** не можна носити з тим, що вже вдягнено на хряку*\n\n'
+                                          '- Спочатку хай сервер зніме {skins}'}
+        wear_already_title = {'en': 'Nothing to vote on',
+                              'ru': 'Не за что голосовать',
+                              'uk': 'Немає за що голосувати'}
+        wear_already_desc = {'en': '*The pig is already the way you want it with **{item}***',
+                             'ru': '*С **{item}** у хряка уже всё так, как вы хотите*',
+                             'uk': '*З **{item}** у хряка вже все так, як ви хочете*'}
+        wear_cancelled_title = {'en': 'No poll started',
+                                'ru': 'Голосование не начато',
+                                'uk': 'Голосування не розпочато'}
+        wear_cancelled_desc = {'en': '*You decided against putting it to the server*',
+                               'ru': '*Вы передумали выносить это на сервер*',
+                               'uk': '*Ви передумали виносити це на сервер*'}
+        shop_empty = {'en': '*Nothing on the shelves yet*',
+                      'ru': '*На полках пока пусто*',
+                      'uk': '*На полицях поки порожньо*'}
         actions_placeholder = {'en': 'More actions',
                                'ru': 'Другие действия',
                                'uk': 'Інші дії'}
-        top_title = {'en': 'Server top',
-                     'ru': 'Топ серверов',
-                     'uk': 'Топ серверів'}
-        top_desc = {'en': '*Here we have the fattest server pigs in the world*',
-                    'ru': '*Здесь у нас самые жирные серверные хряки в мире*',
-                    'uk': '*Тут у нас найжирніші серверні хряки у світі*'}
+        # the board itself; the menu option that opens both boards is top_btn
+        top_title = {'en': 'Fattest servers',
+                     'ru': 'Самые жирные серверы',
+                     'uk': 'Найжирніші сервери'}
+        top_btn = {'en': 'Server top',
+                   'ru': 'Топ серверов',
+                   'uk': 'Топ серверів'}
+        top_money_title = {'en': 'Richest servers',
+                           'ru': 'Богатейшие серверы',
+                           'uk': 'Найбагатші сервери'}
+        top_money_desc = {'en': '*And here are the servers with the fullest piggy banks*',
+                          'ru': '*А здесь серверы с самыми полными копилками*',
+                          'uk': '*А тут сервери з найповнішими скарбничками*'}
+        top_desc = {'en': '*Here we have the fattest community pigs in the world*',
+                    'ru': '*Здесь у нас самые жирные общие хряки в мире*',
+                    'uk': '*Тут у нас найжирніші спільні хряки у світі*'}
         top_your_position = {'en': "*Your server's place: **{place}***",
                              'ru': '*Место вашего сервера: **{place}***',
                              'uk': '*Місце вашого сервера: **{place}***'}
@@ -665,41 +1106,41 @@ class Locales:
                      'ru': 'Вы покормили **{pig}**',
                      'uk': 'Ви погодували **{pig}**'}
         fed_desc = {'en': '*The pig gained **{weight_added}** {kg} and now weighs **{weight}** {kg}*\n\n'
-                          '- You can feed a server pig again **<t:{try_again}:R>**',
+                          '- You can feed a community pig again **<t:{try_again}:R>**',
                     'ru': '*Хряк набрал **{weight_added}** {kg} и теперь весит **{weight}** {kg}*\n\n'
-                          '- Покормить серверного хряка снова можно **<t:{try_again}:R>**',
+                          '- Покормить общего хряка снова можно **<t:{try_again}:R>**',
                     'uk': '*Хряк набрав **{weight_added}** {kg} і тепер важить **{weight}** {kg}*\n\n'
-                          '- Погодувати серверного хряка знову можна **<t:{try_again}:R>**'}
+                          '- Погодувати спільного хряка знову можна **<t:{try_again}:R>**'}
         not_ready_title = {'en': 'Not so fast',
                            'ru': 'Не так быстро',
                            'uk': 'Не так швидко'}
-        not_ready_desc = {'en': '*You can only feed a server pig once every 12 hours*\n\n'
+        not_ready_desc = {'en': '*You can only feed a community pig once every 12 hours*\n\n'
                                 '- This cooldown is shared across every server\n'
                                 '- Try again **<t:{try_again}:R>**',
-                          'ru': '*Кормить серверного хряка можно раз в 12 часов*\n\n'
+                          'ru': '*Кормить общего хряка можно раз в 12 часов*\n\n'
                                 '- Этот кулдаун общий для всех серверов\n'
                                 '- Попробуйте снова **<t:{try_again}:R>**',
-                          'uk': '*Годувати серверного хряка можна раз на 12 годин*\n\n'
+                          'uk': '*Годувати спільного хряка можна раз на 12 годин*\n\n'
                                 '- Цей кулдаун спільний для всіх серверів\n'
                                 '- Спробуйте знову **<t:{try_again}:R>**'}
-        help_title = {'en': 'The server pig',
-                      'ru': 'Серверный хряк',
-                      'uk': 'Серверний хряк'}
+        help_title = {'en': 'The community pig',
+                      'ru': 'Общий Хряк',
+                      'uk': 'Спільний Хряк'}
         help_desc = {'en': '*This pig belongs to the whole server, and grows on what everyone feeds it*\n\n'
                            '1. Press **Feed** to add some weight to it\n'
-                           '2. You can feed **one** server pig every 12 hours, anywhere - so it is worth '
+                           '2. You can feed **one** community pig every 12 hours, anywhere - so it is worth '
                            'thinking about which server you want to grow\n'
                            '3. The more you feed, the bigger your share of the weekly reward\n\n'
                            '> Your own pig in </feed:1118970976282095676> is a separate one, and is not affected',
                      'ru': '*Этот хряк принадлежит всему серверу и растёт на том, чем его кормят*\n\n'
                            '1. Нажмите **Покормить**, чтобы добавить ему веса\n'
-                           '2. Кормить можно **одного** серверного хряка раз в 12 часов, где угодно - так что '
+                           '2. Кормить можно **одного** общего хряка раз в 12 часов, где угодно - так что '
                            'стоит подумать, какой сервер вы хотите растить\n'
                            '3. Чем больше кормите, тем больше ваша доля еженедельной награды\n\n'
                            '> Ваш собственный хряк в </feed:1118970976282095676> - отдельный, его это не касается',
                      'uk': '*Цей хряк належить усьому серверу і росте на тому, чим його годують*\n\n'
                            '1. Натисніть **Погодувати**, щоб додати йому ваги\n'
-                           '2. Годувати можна **одного** серверного хряка раз на 12 годин, будь-де - тож '
+                           '2. Годувати можна **одного** спільного хряка раз на 12 годин, будь-де - тож '
                            'варто подумати, який сервер ви хочете ростити\n'
                            '3. Чим більше годуєте, тим більша ваша частка щотижневої нагороди\n\n'
                            '> Ваш власний хряк у </feed:1118970976282095676> - окремий, його це не стосується'}

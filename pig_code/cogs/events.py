@@ -25,6 +25,7 @@ class Events(commands.Cog):
         await Setup.create_guild_table()
         await Setup.create_user_table()
         await Setup.create_shop_table()
+        await Setup.create_server_shop_table()
         await Setup.create_promo_code_table()
         print('> Tables are created')
         await Guild.register([(guild.id, Func.guess_guild_language(guild)) for guild in self.client.guilds])
@@ -37,6 +38,8 @@ class Events(commands.Cog):
         print('> History structures are fixed')
         await User.fix_settings_structure_for_all_users()
         print('> User settings structures are fixed')
+        print(f'> Server pig messages are updated: '
+              f'{await modules.guild_pig.callbacks.update_all_messages(self.client)}')
         for guild_id in [*config.ADMIN_GUILDS, *config.TEST_GUILDS, *config.PUBLIC_TEST_GUILDS]:
             try:
                 await self.client.tree.sync(guild=discord.Object(id=guild_id))
@@ -45,8 +48,6 @@ class Events(commands.Cog):
         print('> Admin guilds are synced')
         await self.client.tree.sync()
         print('> Tree is synced')
-        print(f'> Server pig messages are updated: '
-              f'{await modules.guild_pig.callbacks.update_all_messages(self.client)}')
 
     @commands.Cog.listener()
     async def on_interaction(self, interaction):
@@ -212,6 +213,21 @@ class Events(commands.Cog):
                         if interaction_values[0] == 'top':
                             await modules.guild_pig.callbacks.top(interaction, pre_command_check=False,
                                                                   ephemeral=True)
+                        elif interaction_values[0] == 'donate':
+                            await modules.guild_pig.callbacks.donate(interaction)
+                        elif interaction_values[0] == 'shop':
+                            await modules.guild_pig.callbacks.shop(interaction, pre_command_check=False,
+                                                                   ephemeral=True)
+                        elif interaction_values[0] == 'inventory':
+                            await modules.guild_pig.callbacks.inventory(interaction, pre_command_check=False,
+                                                                        ephemeral=True)
+                    elif custom_id_params[1] == 'admin':
+                        if interaction_values[0] == 'withdraw':
+                            await modules.guild_pig.callbacks.withdraw(interaction)
+                        elif interaction_values[0] == 'rename':
+                            await modules.guild_pig.callbacks.rename(interaction)
+                        elif interaction_values[0] == 'language':
+                            await modules.guild_pig.callbacks.language(interaction)
                     return
                 if custom_id_params[0] in ['like', 'dislike']:
                     if custom_id_params[0] == 'like':
@@ -240,6 +256,15 @@ class Events(commands.Cog):
                         await modules.shop.callbacks.shop_item_selected(interaction, interaction_values[0],
                                                                         category=custom_id_params[2],
                                                                         page=int(custom_id_params[3]))
+                    elif custom_id_params[1] == 'server_shop':
+                        await modules.shop.callbacks.shop_item_selected(interaction, interaction_values[0],
+                                                                        category=custom_id_params[2],
+                                                                        page=int(custom_id_params[3]),
+                                                                        context='server')
+                    elif custom_id_params[1] == 'server_inventory':
+                        await modules.guild_pig.callbacks.inventory_item_selected(
+                            interaction, interaction_values[0],
+                            category=custom_id_params[2], page=int(custom_id_params[3]))
                 if custom_id_params[0] == 'back_to_inventory':
                     if custom_id_params[1] == 'inventory':
                         await modules.inventory.callbacks.inventory(interaction, init_category=custom_id_params[2],
@@ -250,6 +275,16 @@ class Events(commands.Cog):
                     elif custom_id_params[1] == 'shop':
                         await modules.shop.callbacks.shop(interaction, init_category=custom_id_params[2],
                                                           init_page=int(custom_id_params[3]))
+                    elif custom_id_params[1] == 'server_shop':
+                        await modules.guild_pig.callbacks.shop(interaction, pre_command_check=False,
+                                                               ephemeral=True, edit_original_response=True,
+                                                               init_category=custom_id_params[2],
+                                                               init_page=int(custom_id_params[3]))
+                    elif custom_id_params[1] == 'server_inventory':
+                        await modules.guild_pig.callbacks.inventory(interaction, pre_command_check=False,
+                                                                    ephemeral=True, edit_original_response=True,
+                                                                    init_category=custom_id_params[2],
+                                                                    init_page=int(custom_id_params[3]))
                 if custom_id_params[0] == 'move_to':
                     if custom_id_params[1] == 'shop':
                         await modules.shop.callbacks.shop(interaction, init_category=interaction_values[0],
@@ -257,9 +292,25 @@ class Events(commands.Cog):
                 if custom_id_params[0] == 'donate':
                     await modules.shop.callbacks.donation_page_selected(interaction, interaction_values[0])
                 elif custom_id_params[0] == 'preview_skin':
-                    await modules.other.callbacks.skin_preview(interaction, custom_id_params[1])
+                    await modules.other.callbacks.skin_preview(
+                        interaction, custom_id_params[1],
+                        # absent on buttons posted before the community pig existed
+                        context=custom_id_params[4] if len(custom_id_params) > 4 else None)
                 elif custom_id_params[0] == 'buy':
                     await modules.shop.callbacks.shop_item_buy(interaction, custom_id_params[1])
+                elif custom_id_params[0] == 'server_buy':
+                    await modules.guild_pig.callbacks.buy(
+                        interaction, custom_id_params[1],
+                        category=custom_id_params[2], page=int(custom_id_params[3]),
+                        # whoever may add bots to the server may also spend its money
+                        bypass=interaction.user.guild_permissions.manage_guild)
+                elif custom_id_params[0] in ['server_wear_skin', 'server_remove_skin']:
+                    await modules.guild_pig.callbacks.wear(
+                        interaction, custom_id_params[1],
+                        category=custom_id_params[2], page=int(custom_id_params[3]),
+                        remove=custom_id_params[0] == 'server_remove_skin',
+                        # whoever may add bots to the server may also dress its pig
+                        bypass=interaction.user.guild_permissions.manage_guild)
                 elif custom_id_params[0] == 'wear_skin':
                     await modules.inventory.callbacks.wardrobe_item_wear(interaction, custom_id_params[1],
                                                                          category=custom_id_params[2],

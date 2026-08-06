@@ -69,23 +69,27 @@ async def promocode(inter, code):
         await send_callback(inter, embed=await embeds.promo_code_used(inter, lang, await PromoCode.get_rewards(code)))
 
 
-async def send_money(inter, user, amount, currency, message=None):
+async def send_money(inter, target, amount, currency, message=None):
+    """Sends money to another person. Donating to a server pig goes through the pig's own
+    menu instead, which asks for the amount in a modal."""
     await DisUtils.pre_command_check(inter)
     lang = await User.get_language(inter.user.id)
-    response = await hryak.requests.post_requests.send_money(inter.user.id, user.id, amount, currency, confirmed=False)
+    response = await hryak.requests.post_requests.send_money(inter.user.id, amount, currency,
+                                                             confirmed=False, to_user=target.id)
     if response['status'] == hryak.Status.NO_MONEY:
         await error_callbacks.no_money(inter)
         return
     confirmation = await DisUtils.confirm_message(inter, lang,
                                                description=translate(Locales.SendMoney.confirm_desc, lang,
-                                                                     {'money': amount, 'user': user.display_name,
+                                                                     {'money': amount, 'user': target.display_name,
                                                                       'tax': response.get('tax'),
                                                                       'currency_emoji': await Item.get_emoji(currency),
                                                                       'money_with_tax': response.get('amount_with_tax'),}))
     if not confirmation:
         await send_callback(inter, embed=await embeds.cancel_sending_money(inter, lang))
         return
-    response = await hryak.requests.post_requests.send_money(inter.user.id, user.id, amount, currency, confirmed=True)
+    response = await hryak.requests.post_requests.send_money(inter.user.id, amount, currency,
+                                                             confirmed=True, to_user=target.id)
     if response['status'] == hryak.Status.NO_MONEY:
         await error_callbacks.no_money(inter)
         return
@@ -95,10 +99,10 @@ async def send_money(inter, user, amount, currency, message=None):
                                             'currency_emoji': await Item.get_emoji(currency)})
     if message is not None:
         description += f'\n\n> {translate(Locales.Global.message, lang)}: *{message}*'
-    await DisUtils.send_notification(user, inter, title, description,
+    await DisUtils.send_notification(target, inter, title, description,
                                   prefix_emoji='💸', send_to_dm=True, create_command_notification=True,
                                   notification_id='money_transfer')
-    await send_callback(inter, embed=await embeds.transfer_money(inter, lang, user, amount, currency))
+    await send_callback(inter, embed=await embeds.transfer_money(inter, lang, target, amount, currency))
 
 
 async def report(inter: discord.Interaction, text, attachment):
@@ -153,33 +157,29 @@ async def settings_say(inter, allow: bool):
     await Guild.allow_say(inter.guild.id, allow)
     await send_callback(inter, content=translate(Locales.SettingsSay.scd_content, lang, {'value': str(allow).lower()}))
 
-async def set_server_language(inter, lang):
-    from ..guild_pig import callbacks as guild_pig_callbacks
-    await DisUtils.pre_command_check(inter, language_check=False)
-    await Guild.set_language(inter.guild.id, lang)
-    # the pig's message belongs to the server, so it changes language with it
-    await guild_pig_callbacks.update_message(inter.client, inter.guild.id)
-    await send_callback(inter, embed=generate_embed(title=translate(Locales.SetServerLanguage.scd_title, lang),
-                                                    description=translate(Locales.SetServerLanguage.scd_desc, lang),
-                                                    prefix=Func.generate_prefix('scd'),
-                                                    inter=inter))
-
-
 async def settings_top(inter, participate: bool):
     await DisUtils.pre_command_check(inter, language_check=False)
     lang = await User.get_language(inter.user.id)
     await User.set_top_participation(inter.user.id, participate)
     await send_callback(inter, content=translate(Locales.SettingsTop.scd_content, lang, {'value': str(participate).lower()}))
 
-async def skin_preview(inter, item_id, message: discord.Message = None):
+async def skin_preview(inter, item_id, message: discord.Message = None, context: str = None):
+    """Shows the item on whichever pig would actually wear it - yours, or the server's."""
     lang = await User.get_language(inter.user.id)
     item_id = await Item.clean_id(item_id)
-    not_compatible_skins = await hryak.GameFunc.get_not_compatible_active_skins(inter.user.id, item_id)
+    if context == 'server':
+        worn = await GuildPig.get_skin(inter.guild.id, 'all')
+        not_compatible_skins = await hryak.GameFunc.get_not_compatible_active_skins(
+            None, item_id, skins=worn)
+    else:
+        worn = None
+        not_compatible_skins = await hryak.GameFunc.get_not_compatible_active_skins(inter.user.id, item_id)
     if not_compatible_skins:
         await error_callbacks.not_compatible_skin(inter, item_id, not_compatible_skins, message)
         return
     await send_callback(inter if message is None else message,
-                        embed=await embeds.wardrobe_item_preview(inter, item_id, lang),
+                        embed=await embeds.wardrobe_item_preview(inter, item_id, lang,
+                                                                 context=context, worn=worn),
                         edit_original_response=False,
                         ephemeral=True
                         )

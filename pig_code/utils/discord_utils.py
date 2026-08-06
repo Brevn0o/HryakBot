@@ -85,13 +85,23 @@ async def send_callback(inter,
                             extra_kwargs = {}
                             if embed is not None:
                                 extra_kwargs['embed'] = embed
-                            m = await inter.response.send_message(content, ephemeral=ephemeral,
-                                                                  view=view, files=attachments,
-                                                                  **extra_kwargs)
+                            if inter.response.is_done():
+                                m = await inter.followup.send(content, ephemeral=ephemeral,
+                                                              view=view, files=attachments,
+                                                              wait=True, **extra_kwargs)
+                            else:
+                                m = await inter.response.send_message(content, ephemeral=ephemeral,
+                                                                      view=view, files=attachments,
+                                                                      **extra_kwargs)
                     except discord.HTTPException as e:
                         print(e)
-                        m = await inter.response.send_message(content, embed=embed, ephemeral=ephemeral,
-                                                              view=view, files=attachments)
+                        if inter.response.is_done():
+                            m = await inter.followup.send(content, embed=embed, ephemeral=ephemeral,
+                                                          view=view, files=attachments, wait=True)
+                        else:
+                            m = await inter.response.send_message(content, embed=embed,
+                                                                  ephemeral=ephemeral,
+                                                                  view=view, files=attachments)
 
             except (aiohttp.client_exceptions.ClientError, ssl.SSLError) as e:
                 print(f'[send_callback] transient connection error, attempt {attempt + 1}/{retries}: {e}')
@@ -209,6 +219,24 @@ class DisUtils:
                                           tuple((await Pig.get_genetic(user_id, 'all')).items()),
                                           eye_emotion=eye_emotion)
         return final_pig
+
+    @staticmethod
+    async def generate_guild_pig(guild_id: int, eye_emotion: str = None):
+        """Draws a guild's shared pig.
+
+        Same builder as a person's, asked for the community art - the pig is a different
+        shape, so each item has its own aligned images under its server config. A skin the
+        pig no longer owns is dropped, the same way a user's is.
+        """
+        skins = await GuildPig.get_skin(guild_id, 'all')
+        inventory = await GuildPig.get_inventory(guild_id)
+        for slot, item_id in skins.items():
+            if item_id is not None and await Item.get_amount(item_id, inventory=inventory) <= 0:
+                skins[slot] = None
+        return await hryak.GameFunc.build_pig(tuple(skins.items()),
+                                              tuple((await GuildPig.get_genetic(guild_id, 'all')).items()),
+                                              eye_emotion=eye_emotion,
+                                              context='server')
 
     @staticmethod
     def check_if_right_user(interaction, except_users: list = None):
@@ -501,8 +529,9 @@ class DisUtils:
 
     @staticmethod
     async def confirm_message(inter, lang, description: str = '', image_url=None, ctx_message=False,
-                              ephemeral: bool = False):
-        message = await send_callback(inter, embed=generate_embed(
+                              ephemeral: bool = False, edit_original_response: bool = True):
+        message = await send_callback(inter, edit_original_response=edit_original_response,
+                                      embed=generate_embed(
             title=translate(Locales.Global.are_you_sure, lang),
             description=description,
             prefix=Func.generate_prefix('❓'),
@@ -525,10 +554,19 @@ class DisUtils:
                                           )
                                       ])
 
+        if message is None:
+            # response.send_message returns nothing, so the message the buttons live on
+            # has to be fetched - without it the check below never matches and we hang
+            try:
+                message = await inter.original_response()
+            except discord.errors.HTTPException:
+                return
+
         def check(interaction):
             if message is not None and interaction.message is not None:
-                right_message = message.id == interaction.message.id
-                return right_message and DisUtils.check_if_right_user(interaction)
+                # compare against whoever asked for the confirmation rather than going
+                # through message.interaction, which is None on an ephemeral we sent
+                return message.id == interaction.message.id and interaction.user.id == inter.user.id
 
         interaction = await inter.client.wait_for('interaction', check=check)
         try:

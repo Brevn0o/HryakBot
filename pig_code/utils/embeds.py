@@ -41,7 +41,13 @@ class Embeds:
         return embed
 
     @staticmethod
-    async def item_selected_embed(inter, lang, item_id, _type: str) -> discord.Embed:
+    async def item_selected_embed(inter, lang, item_id, _type: str,
+                                  # whose things are being looked at - a guild pig keeps
+                                  # its own, so there is no user to count them against
+                                  inventory: dict = None,
+                                  # and which pig to model it on: 'server' previews the item
+                                  # on the community pig, since that is what would wear it
+                                  context: str = None) -> discord.Embed:
         footer = Func.generate_footer(inter)
         footer_url = Func.generate_footer_url('user_avatar', inter.user)
         basic_info_desc = ''
@@ -51,13 +57,20 @@ class Embeds:
         embed_color = hryak.config.rarity_colors[await Item.get_rarity(item_id)]
         thumbnail_url = None
         if await Item.get_type(item_id) == 'skin':
-            preview_options = hryak.config.default_pig['skins'].copy()
-            preview_options = await Pig.set_skin_to_options(preview_options, item_id.split('.')[0])
-            thumbnail_url = await hryak.GameFunc.build_pig(tuple(preview_options.items()))
+            # which pig the item is modelled on, skins and genetic together - a community
+            # pig is a different shape and starts from a different blank
+            base = hryak.config.default_guild_pig if context == 'server' else hryak.config.default_pig
+            preview_options = await Pig.set_skin_to_options(base['skins'].copy(),
+                                                            item_id.split('.')[0])
+            thumbnail_url = await hryak.GameFunc.build_pig(tuple(preview_options.items()),
+                                                           tuple(base['genetic'].items()),
+                                                           context=context)
         elif await Item.get_image_path(item_id, config.TEMP_FOLDER_PATH) is not None:
             thumbnail_url = await Item.get_image_path(item_id, config.TEMP_FOLDER_PATH)
         if _type in ['inventory', 'wardrobe']:
-            basic_info_desc += f'{translate(Locales.Global.amount, lang)}: **{await Item.get_amount(item_id, inter.user.id)}**\n'
+            amount = await Item.get_amount(item_id, inventory=inventory) if inventory is not None \
+                else await Item.get_amount(item_id, inter.user.id)
+            basic_info_desc += f'{translate(Locales.Global.amount, lang)}: **{amount}**\n'
             basic_info_desc += f'{translate(Locales.Global.type, lang)}: **{await Item.get_skin_type(item_id, lang) if await Item.get_type(item_id) == "skin" else await Item.get_type(item_id, lang)}**\n'
             basic_info_desc += f'{translate(Locales.Global.rarity, lang)}: **{await Item.get_rarity(item_id, lang)}**'
             if await Item.is_salable(item_id):
@@ -85,9 +98,15 @@ class Embeds:
     @staticmethod
     async def generate_items_list_embeds(inter, _items, lang, empty_desc='Empty', title=None,
                                          prefix_emoji: str = '📦', description='', fields_for_one_page: int = 7,
+                                         # description and empty_desc may also be a {category: text}
+                                         # mapping, when each category wants its own blurb
                                          list_type: str = 'inventory', tradable_items_only: bool = False,
                                          select_item_component_id: str = 'item_select;inventory', sort=True,
-                                         cat_as_title=False, client=None, category_keys: dict = None):
+                                         cat_as_title=False, client=None, category_keys: dict = None,
+                                         footer_override: str = None,
+                                         # whose things are being listed - a guild pig keeps
+                                         # its own, so there is no user to count them against
+                                         inventory: dict = None):
         complete_embeds = {}
         if sort:
             sorted_items = {}
@@ -123,7 +142,9 @@ class Embeds:
                         continue
                     if await Item.exists(item):
                         field_value = ''
-                        if await Item.get_amount(item, inter.user.id) == 0:
+                        amount = await Item.get_amount(item, inventory=inventory) if inventory is not None \
+                            else await Item.get_amount(item, inter.user.id)
+                        if amount == 0:
                             continue
                         if list_type == 'inventory':
                             field_value += f'{translate(Locales.Global.rarity, lang)}: {await Item.get_rarity(item, lang)}\n'
@@ -135,7 +156,7 @@ class Embeds:
                             field_value += f'{translate(Locales.Global.type, lang)}: {await Item.get_skin_type(item, lang)}\n' \
                                            f'{translate(Locales.Global.rarity, lang)}: {await Item.get_rarity(item, lang)}'
                         field_value = f'```{field_value}```'
-                        after_prefix = f" x{await Item.get_amount(item, inter.user.id)}"
+                        after_prefix = f" x{amount}"
                         item_label_without_prefix = f'{await Item.get_name(item, lang)}'
                         emoji = await Item.get_emoji(item)
                         option_desc = Func.cut_text(await Item.get_description(item, lang), 100)
@@ -146,7 +167,10 @@ class Embeds:
                     item_label_without_prefix = f'{await Item.get_name(item, lang)}'
                     emoji = await Item.get_emoji(item)
                     option_desc = Func.cut_text(await Item.get_description(item, lang), 100)
-                    footer_first_part = f'{translate(Locales.Global.balance, lang)}: {await Item.get_amount('coins', inter.user.id)} 🪙'
+                    # whose balance to show - the buyer's by default, but a server shop
+                    # spends the server's money, so the caller can say
+                    footer_first_part = footer_override if footer_override is not None else \
+                        f'{translate(Locales.Global.balance, lang)}: {await Item.get_amount('coins', inter.user.id)} 🪙'
                 item_fields.append(
                     {
                         'name': f'{Func.generate_prefix(emoji, backticks=False)}{item_label_without_prefix}',
@@ -165,8 +189,10 @@ class Embeds:
                 if field['inline'] is True:
                     field['name'] = Func.cut_text(field['name'], 15)
                 field['name'] = f'{field['name']}{field['after_prefix']}'
+            cat_description = description.get(cat, '') if isinstance(description, dict) else description
+            cat_empty_desc = empty_desc.get(cat, '') if isinstance(empty_desc, dict) else empty_desc
             page_embeds = Embeds.generate_embeds_list_from_fields(item_fields,
-                                                                 description=description if item_fields else empty_desc,
+                                                                 description=cat_description if item_fields else cat_empty_desc,
                                                                  title=f'{Func.generate_prefix(prefix_emoji)}{title if not cat_as_title else cat}',
                                                                  fields_for_one=fields_for_one_page,
                                                                  footer=Func.generate_footer(inter,

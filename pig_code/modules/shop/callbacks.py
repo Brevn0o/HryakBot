@@ -127,14 +127,18 @@ async def shop_item_buy(inter, item_id):
                         ))
 
 
-async def shop_item_selected(inter, item_id, message: discord.Message = None, category: str = None, page: int = 1):
+async def shop_item_selected(inter, item_id, message: discord.Message = None, category: str = None,
+                             page: int = 1, context: str = None):
+    """context='server' looks the item up in the servers' shop and sends you back there."""
     lang = await User.get_language(inter.user.id)
-    if not await Shop.is_item_in_shop(item_id):
+    if not await Shop.is_item_in_shop(item_id, context=context):
         await error_callbacks.item_is_not_in_shop(inter)
         return
     await send_callback(inter if message is None else message,
-                        embed=await Embeds.item_selected_embed(inter, lang, item_id=item_id, _type='shop'),
-                        components=await components.shop_item_selected(item_id, lang, category=category, page=page))
+                        embed=await Embeds.item_selected_embed(inter, lang, item_id=item_id, _type='shop',
+                                                               context=context),
+                        components=await components.shop_item_selected(item_id, lang, category=category,
+                                                                       page=page, context=context))
 
 
 async def donation_page_selected(inter, category):

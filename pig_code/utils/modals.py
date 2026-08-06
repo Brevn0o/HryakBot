@@ -35,6 +35,38 @@ async def get_item_amount(inter, title, label, max_amount: int = None, delete_re
     return interaction, int(amount)
 
 
+async def get_text(inter, title, label, placeholder: str = None, max_length: int = 32,
+                   default: str = None):
+    """Asks for a line of text and hands back (interaction, text).
+
+    Same shape as get_item_amount, without the number checking - what counts as a valid
+    answer differs per caller, so it is left to them. Returns None if the modal is opened
+    and never submitted, so callers can just check the result instead of each of them
+    having to catch the timeout.
+    """
+    custom_id = f'modal;get_text{random.randrange(1000)}'
+    modal = discord.ui.Modal(title=title, custom_id=custom_id)
+    modal.add_item(discord.ui.TextInput(
+        label=label,
+        placeholder=placeholder,
+        default=default,
+        custom_id='text',
+        style=discord.TextStyle.short,
+        max_length=max_length,
+        required=True
+    ))
+    await inter.response.send_modal(modal)
+    try:
+        interaction = await inter.client.wait_for(
+            'interaction',
+            check=lambda i: i.data.get('custom_id') == custom_id and i.user.id == inter.user.id,
+            timeout=300,
+        )
+    except asyncio.TimeoutError:
+        return None
+    return interaction, interaction.data['components'][0]['components'][0]['value']
+
+
 async def get_amount_of_hollars_to_donate(inter, delete_response: bool = False):
     lang = await User.get_language(user_id=inter.user.id)
     modal = discord.ui.Modal(title=translate(Locales.PremiumShop.get_amount_of_hollars_modal_title, lang),

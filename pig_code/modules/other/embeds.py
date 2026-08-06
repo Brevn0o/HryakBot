@@ -74,9 +74,13 @@ async def report(inter, lang) -> discord.Embed:
     return embed
 
 
-async def transfer_money(inter, lang, user, amount, currency) -> discord.Embed:
-    embed = generate_embed(title=translate(Locales.SendMoney.scd_title, lang),
-                           description=f"{translate(Locales.SendMoney.scd_desc, lang, {'money': amount, 'user': user.display_name, 'currency_emoji': await Item.get_emoji(currency)})}",
+async def transfer_money(inter, lang, target, amount, currency) -> discord.Embed:
+    # target is a user, or a guild when the money went to that server's pig
+    is_guild = isinstance(target, discord.Guild)
+    title = Locales.GuildPig.donate_scd_title if is_guild else Locales.SendMoney.scd_title
+    desc = Locales.GuildPig.donate_scd_desc if is_guild else Locales.SendMoney.scd_desc
+    embed = generate_embed(title=translate(title, lang),
+                           description=f"{translate(desc, lang, {'money': amount, 'user': getattr(target, 'display_name', None) or target.name, 'currency_emoji': await Item.get_emoji(currency)})}",
                            prefix=Func.generate_prefix('scd'),
                            color=config.success_color,
                            inter=inter)
@@ -116,16 +120,25 @@ async def reset_join_message(inter, lang) -> discord.Embed:
     return embed
 
 
-async def wardrobe_item_preview(inter, item_id, lang) -> discord.Embed:
-    user_skins = await Pig.get_skin(inter.user.id, 'all')
-    preview_options = await Pig.set_skin_to_options(user_skins, item_id)
+async def wardrobe_item_preview(inter, item_id, lang, context: str = None, worn: dict = None) -> discord.Embed:
+    """context='server' models the item on the community pig, wearing what it already has."""
+    if context == 'server':
+        preview_options = await Pig.set_skin_to_options(dict(worn or {}), item_id)
+        image = await hryak.GameFunc.build_pig(
+            tuple(preview_options.items()),
+            tuple((await GuildPig.get_genetic(inter.guild.id, 'all')).items()),
+            context='server')
+    else:
+        worn = await Pig.get_skin(inter.user.id, 'all')
+        preview_options = await Pig.set_skin_to_options(worn, item_id)
+        image = await DisUtils.generate_user_pig(
+            inter.user.id,
+            preview_items={k: v for k, v in preview_options.items() if k not in worn or worn[k] != v})
     embed = generate_embed(
         title=translate(Locales.WardrobeItemPreview.title, lang, {'item': await Item.get_name(item_id, lang)}),
         description=translate(Locales.WardrobeItemPreview.desc, lang, {'item': await Item.get_name(item_id, lang)}),
         prefix=Func.generate_prefix('👁️'),
         inter=inter,
-        thumbnail_url=await DisUtils.generate_user_pig(inter.user.id,
-                                                    preview_items={k: v for k, v in preview_options.items() if
-                                                                   k not in user_skins or user_skins[k] != v}),
+        thumbnail_url=image,
     )
     return embed

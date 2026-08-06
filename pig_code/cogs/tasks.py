@@ -7,6 +7,9 @@ class Tasks(commands.Cog):
     def __init__(self, client):
         self.client = client
         self.daily_shop_update.start()
+        self.server_shop_update.start()
+        self.server_weekly_rewards.start()
+        self.server_polls.start()
         self.process_streaks.start()
         self.process_orders.start()
         if not config.TEST:
@@ -29,6 +32,24 @@ class Tasks(commands.Cog):
         await self.client.wait_until_ready()
         await asyncio.sleep(10)
         await Shop.update_if_needed()
+
+    @tasks.loop(seconds=60)
+    async def server_polls(self):
+        await self.client.wait_until_ready()
+        await asyncio.sleep(10)
+        await modules.guild_pig.callbacks.finalise_polls(self.client)
+
+    @tasks.loop(seconds=60)
+    async def server_shop_update(self):
+        await self.client.wait_until_ready()
+        await asyncio.sleep(10)
+        await Shop.update_server_if_needed()
+
+    @tasks.loop(seconds=60)
+    async def server_weekly_rewards(self):
+        await self.client.wait_until_ready()
+        await asyncio.sleep(10)
+        await modules.guild_pig.callbacks.pay_weekly_rewards(self.client)
 
     @tasks.loop(seconds=300)
     async def give_items(self):
