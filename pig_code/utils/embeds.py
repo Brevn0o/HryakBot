@@ -61,7 +61,7 @@ class Embeds:
             # pig is a different shape and starts from a different blank
             base = hryak.config.default_guild_pig if context == 'server' else hryak.config.default_pig
             preview_options = await Pig.set_skin_to_options(base['skins'].copy(),
-                                                            item_id.split('.')[0])
+                                                            item_id.split('.')[0], context=context)
             thumbnail_url = await hryak.GameFunc.build_pig(tuple(preview_options.items()),
                                                            tuple(base['genetic'].items()),
                                                            context=context)
@@ -71,15 +71,15 @@ class Embeds:
             amount = await Item.get_amount(item_id, inventory=inventory) if inventory is not None \
                 else await Item.get_amount(item_id, inter.user.id)
             basic_info_desc += f'{translate(Locales.Global.amount, lang)}: **{amount}**\n'
-            basic_info_desc += f'{translate(Locales.Global.type, lang)}: **{await Item.get_skin_type(item_id, lang) if await Item.get_type(item_id) == "skin" else await Item.get_type(item_id, lang)}**\n'
+            basic_info_desc += f'{translate(Locales.Global.type, lang)}: **{await Item.get_skin_type(item_id, lang, context) if await Item.get_type(item_id) == "skin" else await Item.get_type(item_id, lang)}**\n'
             basic_info_desc += f'{translate(Locales.Global.rarity, lang)}: **{await Item.get_rarity(item_id, lang)}**'
             if await Item.is_salable(item_id):
                 basic_info_desc += f'\n{translate(Locales.Global.cost_per_item, lang)}: **{await Item.get_sell_price(item_id)} {await Item.get_emoji(await Item.get_sell_price_currency(item_id))}**'
         elif _type == 'shop':
             if await Item.get_amount(item_id) > 1:
                 basic_info_desc += f'{translate(Locales.Global.amount, lang)}: **{await Item.get_amount(item_id)}**\n'
-            basic_info_desc += f'{translate(Locales.Global.price, lang)}: **{await Item.get_market_price(item_id)} {await Item.get_emoji(await Item.get_market_price_currency(item_id))}**\n'
-            basic_info_desc += f'{translate(Locales.Global.type, lang)}: **{await Item.get_skin_type(item_id, lang) if await Item.get_type(item_id) == "skin" else await Item.get_type(item_id, lang)}**\n'
+            basic_info_desc += f'{translate(Locales.Global.price, lang)}: **{await Item.get_market_price(item_id, context)} {await Item.get_emoji(await Item.get_market_price_currency(item_id, context))}**\n'
+            basic_info_desc += f'{translate(Locales.Global.type, lang)}: **{await Item.get_skin_type(item_id, lang, context) if await Item.get_type(item_id) == "skin" else await Item.get_type(item_id, lang)}**\n'
             basic_info_desc += f'{translate(Locales.Global.rarity, lang)}: **{await Item.get_rarity(item_id, lang)}**'
         embed = generate_embed(
             title=title,
