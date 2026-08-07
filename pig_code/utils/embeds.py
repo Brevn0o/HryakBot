@@ -106,7 +106,11 @@ class Embeds:
                                          footer_override: str = None,
                                          # whose things are being listed - a guild pig keeps
                                          # its own, so there is no user to count them against
-                                         inventory: dict = None):
+                                         inventory: dict = None,
+                                         # and whose config describes them: an item can be
+                                         # sold only to servers, in which case everything
+                                         # about it lives in its server config
+                                         context: str = None):
         complete_embeds = {}
         if sort:
             sorted_items = {}
@@ -153,7 +157,7 @@ class Embeds:
                             else:
                                 field_value += f'{translate(Locales.Global.type, lang)}: {await Item.get_type(item, lang)}'
                         elif list_type == 'wardrobe':
-                            field_value += f'{translate(Locales.Global.type, lang)}: {await Item.get_skin_type(item, lang)}\n' \
+                            field_value += f'{translate(Locales.Global.type, lang)}: {await Item.get_skin_type(item, lang, context)}\n' \
                                            f'{translate(Locales.Global.rarity, lang)}: {await Item.get_rarity(item, lang)}'
                         field_value = f'```{field_value}```'
                         after_prefix = f" x{amount}"
@@ -161,7 +165,7 @@ class Embeds:
                         emoji = await Item.get_emoji(item)
                         option_desc = Func.cut_text(await Item.get_description(item, lang), 100)
                 elif list_type == 'shop':
-                    field_value = f'```{translate(Locales.Global.price, lang)}: {await Item.get_market_price(item)} {await Item.get_emoji(await Item.get_market_price_currency(item))}\n' \
+                    field_value = f'```{translate(Locales.Global.price, lang)}: {await Item.get_market_price(item, context)} {await Item.get_emoji(await Item.get_market_price_currency(item, context))}\n' \
                                   f'{translate(Locales.Global.rarity, lang)}: {await Item.get_rarity(item, lang)}```'
                     after_prefix = f" x{await Item.get_amount(item)}" if await Item.get_amount(item) > 1 else ""
                     item_label_without_prefix = f'{await Item.get_name(item, lang)}'

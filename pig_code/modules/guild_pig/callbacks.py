@@ -447,7 +447,7 @@ async def shop(inter, pre_command_check: bool = True, ephemeral: bool = False,
     inventory = await GuildPig.get_inventory(inter.guild.id)
     shop_embeds = await Embeds.generate_items_list_embeds(
         inter, items_by_cats, lang, sort=False,
-        list_type='shop',
+        list_type='shop', context='server',
         prefix_emoji='\U0001f6cd\ufe0f',
         description={category_labels[page]: translate(desc, lang) for page, (_, desc) in pages.items()},
         empty_desc=translate(Locales.GuildPig.shop_empty, lang),
@@ -490,6 +490,7 @@ async def inventory(inter, pre_command_check: bool = True, ephemeral: bool = Fal
             inter, {category_labels[page]: items}, lang,
             list_type=page,
             inventory=pig_inventory,
+            context='server',
             prefix_emoji='🎒',
             description=translate(desc, lang),
             empty_desc=translate(Locales.GuildPig.inventory_empty, lang),
