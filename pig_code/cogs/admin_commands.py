@@ -73,7 +73,7 @@ class AdminCommands(commands.Cog):
 
     @discord.app_commands.command(description='Add item to user\'s inventory')
     @discord.app_commands.guilds(*[*config.ADMIN_GUILDS, *config.TEST_GUILDS, *config.PUBLIC_TEST_GUILDS])
-    async def add_item(self, inter, user: discord.User, item_id: str, amount: int = 1):
+    async def add_item(self, inter, user_id: discord.User, item_id: str, amount: int = 1):
         await DisUtils.pre_command_check(inter, owner_only=True)
         await User.register_user_if_not_exists(user.id)
         if not await Item.exists(item_id):
@@ -81,6 +81,17 @@ class AdminCommands(commands.Cog):
         else:
             await User.add_item(user.id, item_id, amount)
             await send_callback(inter, f'*User **{user}** received **{item_id} x{amount}***')
+
+    @discord.app_commands.command(description='Add item to user\'s inventory')
+    @discord.app_commands.guilds(*[*config.ADMIN_GUILDS, *config.TEST_GUILDS, *config.PUBLIC_TEST_GUILDS])
+    async def add_item_to_server(self, inter, guild_id: str, item_id: str, amount: int = 1):
+        await DisUtils.pre_command_check(inter, owner_only=True)
+        await Guild.register_guild_if_not_exists(guild_id)
+        if not await Item.exists(item_id):
+            await send_callback(inter, "*Item doesn't exist*")
+        else:
+            await GuildPig.add_item(guild_id, item_id, amount)
+            await send_callback(inter, f'*Guild **{guild_id}** received **{item_id} x{amount}***')
 
     @add_item.autocomplete('item_id')
     async def autocomplete_item_id(self, interaction, current: str):
