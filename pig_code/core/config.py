@@ -30,6 +30,7 @@ SDC_TOKEN = get_env('SDC_TOKEN')  # https://bots.server-discord.com/
 IMGBB_TOKEN = get_env('IMGBB_TOKEN')  # https://api.imgbb.com/
 THUMBSNAP_TOKEN = get_env('THUMBSNAP_TOKEN')  # https://thumbsnap.com/
 BOTICORD_TOKEN = get_env('BOTICORD_TOKEN')  # https://boticord.top/
+TOPGG_WEBHOOK_AUTH = get_env('TOPGG_WEBHOOK_AUTH')
 
 # github version
 GITHUB_PUBLIC_VERSION = True  # don't change this line
