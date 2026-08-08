@@ -123,11 +123,7 @@ async def reset_join_message(inter, lang) -> discord.Embed:
 async def wardrobe_item_preview(inter, item_id, lang, context: str = None, worn: dict = None) -> discord.Embed:
     """context='server' models the item on the community pig, wearing what it already has."""
     if context == 'server':
-        preview_options = await Pig.set_skin_to_options(dict(worn or {}), item_id, context='server')
-        image = await hryak.GameFunc.build_pig(
-            tuple(preview_options.items()),
-            tuple((await GuildPig.get_genetic(inter.guild.id, 'all')).items()),
-            context='server')
+        image = await DisUtils.generate_guild_pig(inter.guild.id, preview_items={'preview': item_id})
     else:
         worn = await Pig.get_skin(inter.user.id, 'all')
         preview_options = await Pig.set_skin_to_options(worn, item_id)

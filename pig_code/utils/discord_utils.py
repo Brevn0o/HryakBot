@@ -221,18 +221,25 @@ class DisUtils:
         return final_pig
 
     @staticmethod
-    async def generate_guild_pig(guild_id: int, eye_emotion: str = None):
+    async def generate_guild_pig(guild_id: int, eye_emotion: str = None, preview_items: dict = None):
         """Draws a guild's shared pig.
 
         Same builder as a person's, asked for the community art - the pig is a different
         shape, so each item has its own aligned images under its server config. A skin the
         pig no longer owns is dropped, the same way a user's is.
+
+        preview_items puts something on top of whatever the pig is already wearing, to show
+        what it would look like. Applied after the ownership check on purpose: the whole
+        point of a preview is trying on something the pig does not have yet.
         """
         skins = await GuildPig.get_skin(guild_id, 'all')
         inventory = await GuildPig.get_inventory(guild_id)
         for slot, item_id in skins.items():
             if item_id is not None and await Item.get_amount(item_id, inventory=inventory) <= 0:
                 skins[slot] = None
+        if preview_items is not None:
+            for item_id in preview_items.values():
+                skins = await Pig.set_skin_to_options(skins, item_id, context='server')
         return await hryak.GameFunc.build_pig(tuple(skins.items()),
                                               tuple((await GuildPig.get_genetic(guild_id, 'all')).items()),
                                               eye_emotion=eye_emotion,

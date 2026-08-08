@@ -15,7 +15,6 @@ async def wardrobe(inter, message=None, select_item_component_id: str = 'item_se
     embed_thumbnail_url = await DisUtils.generate_user_pig(inter.user.id)
     empty_desc = translate(Locales.Wardrobe.wardrobe_empty_desc, lang)
     _cats = await Tech.get_categorized_items(inter.user.id, 'wardrobe')
-    # labels are what the user sees; the raw keys are what travels in custom_ids
     category_labels = {key: (translate(Locales.Global.everything, lang) if key == 'all'
                              else translate(hryak.locale.Locale.SkinTypes[key], lang)) for key in _cats}
     items_by_cats = {category_labels[key]: items for key, items in _cats.items()}

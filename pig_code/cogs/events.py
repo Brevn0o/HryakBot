@@ -296,7 +296,6 @@ class Events(commands.Cog):
                 elif custom_id_params[0] == 'preview_skin':
                     await modules.other.callbacks.skin_preview(
                         interaction, custom_id_params[1],
-                        # absent on buttons posted before the community pig existed
                         context=custom_id_params[4] if len(custom_id_params) > 4 else None)
                 elif custom_id_params[0] == 'buy':
                     await modules.shop.callbacks.shop_item_buy(interaction, custom_id_params[1])
