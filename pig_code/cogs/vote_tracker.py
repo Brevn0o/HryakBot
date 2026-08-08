@@ -14,19 +14,23 @@ WEBHOOK_PATH = "/"
 class VoteWebhookCog(commands.Cog):
     def __init__(self, client: commands.Bot):
         self.client = client
-        self.webhook_manager = topgg.WebhookManager(client).dbl_webhook(
-            WEBHOOK_PATH,
-            config.TOPGG_WEBHOOK_AUTH,
+        self.webhook_manager = topgg.WebhookManager()
+        endpoint = (
+            topgg.WebhookEndpoint()
+            .type(topgg.WebhookType.BOT)
+            .route(WEBHOOK_PATH)
+            .auth(config.TOPGG_WEBHOOK_AUTH)
+            .callback(self.on_dbl_vote)
         )
+        self.webhook_manager.endpoint(endpoint)
 
     async def cog_load(self):
-        self.webhook_manager.run(PORT)
+        await self.webhook_manager.start(PORT)
 
     async def cog_unload(self):
         await self.webhook_manager.close()
 
-    @commands.Cog.listener()
-    async def on_dbl_vote(self, data: dict):
+    async def on_dbl_vote(self, data: "topgg.BotVoteData"):
         """
         Fired whenever top.gg POSTs a vote event to your webhook.
         `data` looks like:
