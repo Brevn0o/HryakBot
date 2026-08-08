@@ -46,9 +46,9 @@ class VoteWebhookCog(commands.Cog):
         await self.handle_vote(user_id, data)
 
     async def handle_vote(self, user_id: int, data: dict):
-        await send_webhook(config.REPORT_WEBHOOKS, content=f"vote detected")
+        await send_webhook(config.REPORT_WEBHOOKS[0], content=f"vote detected")
         print(f"{user_id}: {data}")
-        await send_webhook(config.REPORT_WEBHOOKS, content=f"{user_id}: {data}")
+        await send_webhook(config.REPORT_WEBHOOKS[0], content=f"{user_id}: {data}")
 
 
 async def setup(client: commands.Bot):
