@@ -28,4 +28,5 @@ scipy==1.14.1
 typing_extensions==4.12.2
 urllib3==2.3.0
 yarl==1.18.3
+topggpy==2.0.0a0
 git+https://github.com/Brevn0o/hryak-core.git  # bump this on every hryak-core release
