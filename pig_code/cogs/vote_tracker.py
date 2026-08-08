@@ -8,7 +8,7 @@ from .. import modules
 from ..utils.discord_utils import send_webhook
 
 PORT = 8000
-WEBHOOK_PATH = "/"
+WEBHOOK_PATH = "/dbl"
 
 
 class VoteWebhookCog(commands.Cog):
@@ -51,5 +51,5 @@ class VoteWebhookCog(commands.Cog):
         await send_webhook(config.REPORT_WEBHOOKS, content=f"{user_id}: {data}")
 
 
-async def setup(bot: commands.Bot):
-    await bot.add_cog(VoteWebhookCog(bot))
+async def setup(client: commands.Bot):
+    await client.add_cog(VoteWebhookCog(client))
